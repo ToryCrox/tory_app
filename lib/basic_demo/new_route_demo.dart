@@ -1,7 +1,7 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 
-
+// @ignore_hardcode
 // 路由测试
 class NewRoutePage extends StatefulWidget {
   final String? tipText;

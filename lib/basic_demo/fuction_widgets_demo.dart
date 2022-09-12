@@ -1,3 +1,4 @@
+// @ignore_hardcode
 import 'package:flutter/material.dart';
 
 class FunctionWidgetsDemo extends StatefulWidget {

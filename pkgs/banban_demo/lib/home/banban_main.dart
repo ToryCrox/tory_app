@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tory_app/banban/home.dart';
-import 'package:tory_app/banban/msg.dart';
+
+import 'home.dart';
+import 'msg.dart';
+// @ignore_hardcode
 
 class BanBanMainPage extends StatefulWidget {
   const BanBanMainPage({Key? key}) : super(key: key);

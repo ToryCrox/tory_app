@@ -8,13 +8,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.8.2"
-  banban_demo:
-    dependency: "direct main"
-    description:
-      path: "pkgs/banban_demo"
-      relative: true
-    source: path
-    version: "1.0.0+1"
   boolean_selector:
     dependency: transitive
     description:
@@ -57,27 +50,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.5"
-  english_words:
-    dependency: "direct main"
-    description:
-      name: english_words
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "4.0.0"
-  extended_list:
-    dependency: transitive
-    description:
-      name: extended_list
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.0.0"
-  extended_list_library:
-    dependency: transitive
-    description:
-      name: extended_list_library
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -97,13 +69,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.4"
-  flutter_spinkit:
-    dependency: "direct main"
-    description:
-      name: flutter_spinkit
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "5.1.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -123,20 +88,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.1"
-  loading_more_list:
-    dependency: "direct main"
-    description:
-      name: loading_more_list
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "5.0.2"
-  loading_more_list_library:
-    dependency: transitive
-    description:
-      name: loading_more_list_library
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.1"
   matcher:
     dependency: transitive
     description:
@@ -236,7 +187,7 @@ packages:
   tory_base:
     dependency: "direct main"
     description:
-      path: "pkgs/tory_base"
+      path: "../tory_base"
       relative: true
     source: path
     version: "1.0.0+1"
@@ -254,13 +205,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.1"
-  waterfall_flow:
-    dependency: transitive
-    description:
-      name: waterfall_flow
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.0.2"
   xml:
     dependency: transitive
     description:

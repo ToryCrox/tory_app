@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+// @ignore_hardcode
 class ImageAndIconRoute extends StatelessWidget {
   const ImageAndIconRoute({Key? key}) : super(key: key);
 

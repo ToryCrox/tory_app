@@ -1,14 +1,15 @@
+// @ignore_hardcode
 import 'dart:async';
 
+import 'package:banban_demo/banban_navi_list.dart';
 import 'package:flutter/material.dart';
 import 'package:tory_app/basic_demo/basic_layout_page.dart';
 import 'package:tory_app/basic_demo/basic_widgets_page.dart';
 import 'package:tory_app/basic_demo/image_icon_route.dart';
 import 'package:tory_app/basic_demo/new_route_demo.dart';
-import 'package:tory_app/basic_demo/state_demo.dart';
 
-import 'banban/banban_main.dart';
 import 'basic_demo/fuction_widgets_demo.dart';
+import 'widgets/route_page_item.dart';
 
 void main() {
   var onError = FlutterError.onError; //先将 onerror 保存起来
@@ -89,19 +90,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -150,66 +138,17 @@ class _MyHomePageState extends State<MyHomePage> {
               builder: (context) => const FunctionWidgetsDemo(),
             ),
             RoutePageItem(
-              title: "伴伴Home",
-              builder: (context) => const BanBanMainPage(),
-            ),
+              title: "伴伴导航",
+              builder: (context) => const BanBanNaviListPage(),
+            )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {},
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}
-
-class Echo extends StatelessWidget {
-  const Echo({
-    Key? key,
-    required this.text,
-    this.backgroundColor = Colors.grey, //默认为灰色
-  }) : super(key: key);
-
-  final String text;
-  final Color backgroundColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(2)),
-            color: backgroundColor),
-        //color: backgroundColor,
-        child: Text(text),
-      ),
-    );
-  }
-}
-
-class RoutePageItem extends StatelessWidget {
-  final String title;
-  final WidgetBuilder? builder;
-  final VoidCallback? onPress;
-
-  const RoutePageItem(
-      {Key? key, required this.title, this.builder, this.onPress})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(title),
-      onTap: () {
-        if (onPress != null) {
-          onPress?.call();
-        } else if (builder != null) {
-          Navigator.of(context).push(MaterialPageRoute(builder: builder!));
-        }
-      },
     );
   }
 }

@@ -1,4 +1,4 @@
-
+// @ignore_hardcode
 
 import 'package:flutter/material.dart';
 

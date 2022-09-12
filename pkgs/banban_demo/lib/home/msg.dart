@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// @ignore_hardcode
 
 class BanBanMsgPage extends StatefulWidget {
   const BanBanMsgPage({Key? key}) : super(key: key);
