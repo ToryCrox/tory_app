@@ -8,6 +8,7 @@ import 'package:tory_app/basic_demo/basic_widgets_page.dart';
 import 'package:tory_app/basic_demo/image_icon_route.dart';
 import 'package:tory_app/basic_demo/new_route_demo.dart';
 
+import 'animate/animate_main.dart';
 import 'basic_demo/fuction_widgets_demo.dart';
 import 'widgets/route_page_item.dart';
 
@@ -136,6 +137,10 @@ class _MyHomePageState extends State<MyHomePage> {
             RoutePageItem(
               title: "功能组件测试",
               builder: (context) => const FunctionWidgetsDemo(),
+            ),
+            RoutePageItem(
+              title: "动画组件测试",
+              builder: (context) => const AnimateMainPage(),
             ),
             RoutePageItem(
               title: "伴伴导航",
