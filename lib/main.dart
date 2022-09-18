@@ -1,5 +1,6 @@
 // @ignore_hardcode
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:banban_demo/banban_navi_list.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,14 @@ class MyApp extends StatelessWidget {
               tipText: ModalRoute.of(context)?.settings.arguments as String?,
             )
       },
+      scrollBehavior: MaterialScrollBehavior().copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown
+        },
+      ),
     );
   }
 }

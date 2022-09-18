@@ -48,6 +48,8 @@ dependencies:
   flutter_svg: ^1.0.3
   # 加载更多的库 https://pub.dev/packages/loading_more_list
   loading_more_list: ^5.0.2
+  marquee: ^2.2.3
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

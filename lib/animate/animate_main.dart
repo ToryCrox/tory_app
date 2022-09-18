@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tory_app/widgets/route_page_item.dart';
 
 import 'avatar_spring.dart';
+import 'marquee_demo.dart';
 
 class AnimateMainPage extends StatefulWidget {
   const AnimateMainPage({Key? key}) : super(key: key);
@@ -22,6 +23,10 @@ class _AnimateMainPageState extends State<AnimateMainPage> {
           RoutePageItem(
             title: "头像直播动画",
             builder: (context) => const AnimatedSpreadPage(),
+          ),
+          RoutePageItem(
+            title: "Maqueen例子",
+            builder: (context) =>  MarqueeDemo(),
           ),
         ],
       ),
