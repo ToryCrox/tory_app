@@ -1,4 +1,5 @@
 // @ignore_hardcode
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -44,7 +45,44 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
               ),
             ),
           ),
-          buildSpinKit(context),
+          //buildSpinKit(context),
+          Center(
+              child: RoomVipButton(
+            onTap: () {},
+            text: "退出贵宾",
+          )),
+          _buildVipHeader(),
+          _buildBorderTest(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVipHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          PositionedDirectional(
+            start: 0,
+            top: 0,
+            bottom: 0,
+            child: IconButton(
+              icon: const BackButtonIcon(),
+              iconSize: 14,
+              onPressed: () {
+                Navigator.maybePop(context);
+              },
+            ),
+          ),
+          Text(
+            "我开通的贵宾",
+            style: TextStyle(
+              fontSize: 18,
+              color: Color(0xFF313131),
+            ),
+          )
         ],
       ),
     );
@@ -146,6 +184,65 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildBorderTest() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: 100,
+          height: 100,
+          decoration:  BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.red, width: 2),
+          ),
+        ),
+        Container(
+          width: 100,
+          height: 100,
+          decoration:  BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.blue, width: 40),
+          ),
+        )
+
+      ],
+    );
+  }
+}
+
+class RoomVipButton extends StatelessWidget {
+  final VoidCallback onTap;
+  final String text;
+
+  const RoomVipButton({
+    Key? key,
+    required this.onTap,
+    required this.text,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Ink(
+        decoration: BoxDecoration(
+            gradient: const LinearGradient(
+                colors: [Color(0xFF7458EA), Color(0xFF5A0FB3)]),
+            borderRadius: BorderRadius.circular(14)),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Container(
+          constraints: const BoxConstraints(minWidth: 60, minHeight: 28),
+          alignment: Alignment.center,
+          child: Text(
+            text,
+            maxLines: 1,
+            style: const TextStyle(color: Colors.white, fontSize: 11),
+          ),
+        ),
+      ),
     );
   }
 }

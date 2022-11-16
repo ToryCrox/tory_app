@@ -11,6 +11,7 @@ import 'package:tory_app/basic_demo/new_route_demo.dart';
 
 import 'animate/animate_main.dart';
 import 'basic_demo/fuction_widgets_demo.dart';
+import 'basic_demo/sliver/sliver_navi_page.dart';
 import 'widgets/route_page_item.dart';
 
 void main() {
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Container(child: const MyHomePage(title: 'Flutter Demo Home Page')),
       routes: {
         "/new_page": (context) => NewRoutePage(
               tipText: ModalRoute.of(context)?.settings.arguments as String?,
@@ -150,6 +151,10 @@ class _MyHomePageState extends State<MyHomePage> {
             RoutePageItem(
               title: "动画组件测试",
               builder: (context) => const AnimateMainPage(),
+            ),
+            RoutePageItem(
+              title: "滚动组件测试",
+              builder: (context) => const SliverNaviPage(),
             ),
             RoutePageItem(
               title: "伴伴导航",

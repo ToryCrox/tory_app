@@ -1,5 +1,6 @@
 // @ignore_hardcode
 
+import 'package:banban_demo/assets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -127,7 +128,7 @@ class _ImproveProfileState extends State<ImproveProfile> {
             child: GestureDetector(
               onTap: _goAvatarPicker,
               child: SvgPicture.asset(
-                "pkgs/banban_demo/assets/images/ic_login_avatar.svg",
+                Assets.banban_demo$assets_images_ic_login_avatar_svg,
                 width: 36,
                 height: 36,
                 color: Theme.of(context).primaryColor,
@@ -317,12 +318,13 @@ class GenderPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final maleImg = gender == 1
-        ? "pkgs/banban_demo/assets/images/ic_gender_inset_male_checked.webp"
-        : "pkgs/banban_demo/assets/images/ic_gender_inset_male.webp";
+        ? Assets.banban_demo$assets_images_ic_gender_inset_male_checked_webp
+        : Assets.banban_demo$assets_images_ic_gender_inset_male_webp;
     final femaleImg = gender == 2
-        ? "pkgs/banban_demo/assets/images/ic_gender_inset_female_checked.webp"
-        : "pkgs/banban_demo/assets/images/ic_gender_inset_female.webp";
+        ? Assets.banban_demo$assets_images_ic_gender_inset_female_checked_webp
+        : Assets.banban_demo$assets_images_ic_gender_inset_female_webp;
 
     return Container(
       height: 330,
