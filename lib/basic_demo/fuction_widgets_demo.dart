@@ -1,5 +1,10 @@
 // @ignore_hardcode
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:tory_app/widgets/route_page_item.dart';
+
+import 'async_demo_page.dart';
 
 class FunctionWidgetsDemo extends StatefulWidget {
   const FunctionWidgetsDemo({Key? key}) : super(key: key);
@@ -8,10 +13,42 @@ class FunctionWidgetsDemo extends StatefulWidget {
   State<FunctionWidgetsDemo> createState() => _FunctionWidgetsDemoState();
 }
 
-class _FunctionWidgetsDemoState extends State<FunctionWidgetsDemo> {
+class _FunctionWidgetsDemoState extends State<FunctionWidgetsDemo> with WidgetsBindingObserver {
   var _lastPressTime = 0;
 
   var shareData = SharedData(0);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    debugPrint("FunctionWidgetsDemo initState");
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    debugPrint("FunctionWidgetsDemo dispose");
+    super.dispose();
+  }
+
+  @override
+  void activate() {
+    super.activate();
+    debugPrint("FunctionWidgetsDemo activate");
+  }
+
+  @override
+  void deactivate() {
+    debugPrint("FunctionWidgetsDemo deactivate");
+    super.deactivate();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    debugPrint("FunctionWidgetsDemo didChangeAppLifecycleState: $state");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +69,8 @@ class _FunctionWidgetsDemoState extends State<FunctionWidgetsDemo> {
               }
               _lastPressTime = timeStamp;
               return false;
-            }),
+            },
+        ),
       ),
     );
   }
@@ -53,7 +91,8 @@ class _FunctionWidgetsDemoState extends State<FunctionWidgetsDemo> {
               color: Theme.of(context).primaryColorDark,
             ),
           ],
-        )
+        ),
+        RoutePageItem(title: "异步测试", builder: (context) => AsyncDemoPage(),),
       ],
     );
   }
