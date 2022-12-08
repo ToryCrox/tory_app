@@ -1,4 +1,5 @@
 import 'package:english_words/english_words.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // @ignore_hardcode
@@ -10,6 +11,22 @@ class NewRoutePage extends StatefulWidget {
 
   @override
   State<NewRoutePage> createState() => _NewRoutePageState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.defaultDiagnosticsTreeStyle = DiagnosticsTreeStyle.dense;
+  }
+
+  @override
+  DiagnosticsNode toDiagnosticsNode({String? name, DiagnosticsTreeStyle? style}) {
+    return super.toDiagnosticsNode(name: name, style: style);
+  }
+
+  @override
+  List<DiagnosticsNode> debugDescribeChildren() {
+    return [];
+  }
 }
 
 class _NewRoutePageState extends State<NewRoutePage> {

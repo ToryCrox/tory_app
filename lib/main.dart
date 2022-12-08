@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:banban_demo/banban_navi_list.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tory_app/basic_demo/basic_layout_page.dart';
 import 'package:tory_app/basic_demo/basic_widgets_page.dart';
 import 'package:tory_app/basic_demo/image_icon_route.dart';
@@ -20,7 +21,19 @@ void main() {
     onError?.call(details); //调用默认的onError
     reportErrorAndLog(details);
   });
-  runZoned(() => runApp(const MyApp()),
+
+  final providers = <ChangeNotifierProvider>[];
+  providers.add(ChangeNotifierProvider(create: (BuildContext context) {
+    return "";
+  },));
+
+  runZoned(
+      () => runApp(
+            MultiProvider(
+              providers: [],
+              child: const MyApp(),
+            ),
+          ),
       zoneSpecification: ZoneSpecification(print: (self, parent, zone, line) {
         collectLog(line);
         parent.print(zone, "Interceptor: $line");
@@ -40,7 +53,6 @@ void reportErrorAndLog(FlutterErrorDetails details) {
   debugPrintStack(stackTrace: details.stack);
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -52,7 +64,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      builder: (context, child){
+      builder: (context, child) {
         debugPrint("");
         return child ?? Container();
       },
@@ -145,3 +157,5 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+

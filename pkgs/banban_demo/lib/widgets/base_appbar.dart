@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../profile_v1/improve_profile.dart';
@@ -29,4 +30,25 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget{
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  List<DiagnosticsNode> debugDescribeChildren() {
+    return [];
+  }
+
+
+  @override
+  StatelessElement createElement() {
+    return MStatelessElement(this);
+  }
+}
+
+class MStatelessElement extends StatelessElement {
+  MStatelessElement(StatelessWidget widget) : super(widget);
+
+  @override
+  List<DiagnosticsNode> debugDescribeChildren() {
+    return [];
+  }
+
 }
