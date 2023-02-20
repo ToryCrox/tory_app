@@ -3,17 +3,28 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:banban_demo/banban_navi_list.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tory_app/basic_demo/basic_layout_page.dart';
+import 'package:tory_app/layout/basic_layout_page.dart';
 import 'package:tory_app/basic_demo/basic_widgets_page.dart';
 import 'package:tory_app/basic_demo/image_icon_route.dart';
 import 'package:tory_app/basic_demo/new_route_demo.dart';
+import 'package:tory_base/tory_base.dart';
+
+import 'package:flutter_ume/flutter_ume.dart'; // UME framework
+import 'package:flutter_ume_kit_ui/flutter_ume_kit_ui.dart'; // UI kits
+import 'package:flutter_ume_kit_perf/flutter_ume_kit_perf.dart'; // Performance kits
+import 'package:flutter_ume_kit_show_code/flutter_ume_kit_show_code.dart'; // Show Code
+import 'package:flutter_ume_kit_device/flutter_ume_kit_device.dart'; // Device info
+import 'package:flutter_ume_kit_console/flutter_ume_kit_console.dart'; // Show debugPrint
+import 'package:flutter_ume_kit_dio/flutter_ume_kit_dio.dart'; // Dio Inspector
 
 import 'animate/animate_main.dart';
-import 'basic_demo/fuction_widgets_demo.dart';
+import 'basic_demo/bubble_tip_demo.dart';
+import 'basic_demo/function_widgets_demo.dart';
 import 'basic_demo/sliver/sliver_navi_page.dart';
-import 'widgets/route_page_item.dart';
+import 'dev/shared_preferences_list.dart';
 
 void main() {
   var onError = FlutterError.onError; //先将 onerror 保存起来
@@ -22,18 +33,27 @@ void main() {
     reportErrorAndLog(details);
   });
 
-  final providers = <ChangeNotifierProvider>[];
-  providers.add(ChangeNotifierProvider(create: (BuildContext context) {
-    return "";
-  },));
-
-  runZoned(
-      () => runApp(
-            MultiProvider(
-              providers: [],
-              child: const MyApp(),
-            ),
-          ),
+  runZoned(() {
+    if (kDebugMode) {
+      PluginManager.instance // Register plugin kits
+        ..register(WidgetInfoInspector())
+        ..register(WidgetDetailInspector())
+        ..register(ColorSucker())
+        ..register(AlignRuler())
+        ..register(ColorPicker()) // New feature
+        ..register(TouchIndicator()) // New feature
+        ..register(Performance())
+        ..register(ShowCode())
+        ..register(MemoryInfoPage())
+        ..register(CpuInfoPage())
+        ..register(DeviceInfoPanel())
+        ..register(Console()); // Pass in your Dio instance
+      // After flutter_ume 0.3.0
+      runApp(UMEWidget(child: MyApp(), enable: true));
+    } else {
+      runApp(MyApp());
+    }
+  },
       zoneSpecification: ZoneSpecification(print: (self, parent, zone, line) {
         collectLog(line);
         parent.print(zone, "Interceptor: $line");
@@ -95,7 +115,12 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with LifeStateOwnerMixin {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,50 +129,11 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            RoutePageItem(
-              title: "路由测试",
-              onPress: () async {
-                final result = await Navigator.of(context)
-                    .pushNamed("/new_page", arguments: "hi from Route Named");
-                print("result: $result");
-              },
-            ),
-            RoutePageItem(
-              title: "图片测试",
-              builder: (context) => const ImageAndIconRoute(),
-            ),
-            RoutePageItem(
-              title: "基础组件测试",
-              builder: (context) => const BasicWidgetsPage(),
-            ),
-            RoutePageItem(
-              title: "布局类测试",
-              builder: (context) => const BasicLayoutPage(),
-            ),
-            RoutePageItem(
-              title: "功能组件测试",
-              builder: (context) => const FunctionWidgetsDemo(),
-            ),
-            RoutePageItem(
-              title: "动画组件测试",
-              builder: (context) => const AnimateMainPage(),
-            ),
-            RoutePageItem(
-              title: "滚动组件测试",
-              builder: (context) => const SliverNaviPage(),
-            ),
-            RoutePageItem(
-              title: "伴伴导航",
-              builder: (context) => const BanBanNaviListPage(),
-            ),
-          ],
-        ),
+      body: ListTileTheme.merge(
+        dense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: -10),
+        horizontalTitleGap: 0,
+        child: _buildColumn(context),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -156,6 +142,58 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+  Widget _buildColumn(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        RoutePageItem(
+          title: "路由测试",
+          icon: Icons.navigation,
+          onPress: () async {
+            final result = await Navigator.of(context)
+                .pushNamed("/new_page", arguments: "hi from Route Named");
+            print("result: $result");
+          },
+        ),
+        RoutePageItem(
+          title: "图片测试",
+          builder: (context) => const ImageAndIconRoute(),
+        ),
+        RoutePageItem(
+          title: "气泡测试",
+          builder: (context) => const BubbleTipDemo(),
+        ),
+        RoutePageItem(
+          title: "基础组件测试",
+          builder: (context) => const BasicWidgetsPage(),
+        ),
+        RoutePageItem(
+          title: "布局类测试",
+          builder: (context) => const BasicLayoutPage(),
+        ),
+        RoutePageItem(
+          title: "功能组件测试",
+          builder: (context) => const FunctionWidgetsDemo(),
+        ),
+        RoutePageItem(
+          title: "动画组件测试",
+          builder: (context) => const AnimateMainPage(),
+        ),
+        RoutePageItem(
+          title: "滚动组件测试",
+          builder: (context) => const SliverNaviPage(),
+        ),
+        RoutePageItem(
+          title: "伴伴导航",
+          builder: (context) => const BanBanNaviListPage(),
+        ),
+        RoutePageItem(
+          title: "SharedPreferencesListPage",
+          builder: (context) => const SharedPreferencesListPage(),
+        ),
+
+
+      ],
+    );
+  }
 }
-
-

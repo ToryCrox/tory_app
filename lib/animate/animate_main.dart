@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tory_app/widgets/route_page_item.dart';
+import 'package:tory_app/animate/transform_page.dart';
+import 'package:tory_base/tory_base.dart';
 
 import 'avatar_spring.dart';
 import 'marquee_demo.dart';
@@ -27,6 +28,10 @@ class _AnimateMainPageState extends State<AnimateMainPage> {
           RoutePageItem(
             title: "Maqueen例子",
             builder: (context) =>  MarqueeDemo(),
+          ),
+          RoutePageItem(
+            title: "TransformPage",
+            builder: (context) =>  TransformPage(),
           ),
         ],
       ),

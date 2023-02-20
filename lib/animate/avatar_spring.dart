@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'animate_spred_effect.dart';
+import 'widget/animate_spred_effect.dart';
 
 class AnimatedSpreadPage extends StatefulWidget {
   const AnimatedSpreadPage({Key? key}) : super(key: key);
@@ -21,10 +21,11 @@ class _AnimatedSpreadPageState extends State<AnimatedSpreadPage> {
       body: Container(
         color: Colors.blue,
         child: Center(
-          child: Row(
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              AnimatedSpreadEffect(
-                maxRadius: 300,
+              const AnimatedSpreadEffect(
+                maxRadius: 150,
                 minRadius: 100,
                 color: Colors.white,
                 ringWidth: 3,
@@ -32,10 +33,13 @@ class _AnimatedSpreadPageState extends State<AnimatedSpreadPage> {
                 isShowCenterCircle: false,
               ),
               Container(
-                width: 200,
-                  height: 200,
-                  color: Colors.amber,
-                  child: CustomPaint(painter: TestPainter(),))
+                width: 100,
+                height: 100,
+                color: Colors.amber,
+                child: CustomPaint(
+                  painter: TestPainter(),
+                ),
+              )
             ],
           ),
         ),
@@ -52,5 +56,4 @@ class TestPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
-
 }
