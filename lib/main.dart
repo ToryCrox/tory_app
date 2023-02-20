@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:banban_demo/banban_navi_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:tory_app/layout/basic_layout_page.dart';
 import 'package:tory_app/basic_demo/basic_widgets_page.dart';
@@ -94,6 +95,13 @@ class MyApp extends StatelessWidget {
               tipText: ModalRoute.of(context)?.settings.arguments as String?,
             )
       },
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      // Insert this line
+      supportedLocales: const [Locale("zh", "CN"), Locale("en", "US")],
       scrollBehavior: const MaterialScrollBehavior().copyWith(
         dragDevices: {
           PointerDeviceKind.mouse,

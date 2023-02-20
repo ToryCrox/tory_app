@@ -34,25 +34,25 @@ class BubbleTipWrapperWidget extends StatelessWidget {
         end: align == PopupAlign.end ? indicatorPadding : 0,
       );
     }
-    double degree = 0;
+    int quarterTurns = 0;
     if (direction == PopupDirection.top) {
-      degree = 0;
+      quarterTurns = 0;
     } else if (direction == PopupDirection.bottom) {
-      degree = 180;
+      quarterTurns = 2;
     } else if (direction.isLeft(context)) {
-      degree = 90;
+      quarterTurns = 3;
     } else {
-      degree = 270;
+      quarterTurns = 1;
     }
     final indicatorWrap = Padding(
       padding: padding,
-      child: Transform.rotate(angle: pi * degree / 180, child: indicator),
+      child: RotatedBox(quarterTurns: quarterTurns, child: indicator),
     );
     final List<Widget> children;
     if (direction == PopupDirection.end || direction == PopupDirection.bottom) {
-      children = [indicatorWrap, child];
+      children = [indicatorWrap, Flexible(child: child)];
     } else {
-      children = [child, indicatorWrap];
+      children = [Flexible(child: child), indicatorWrap];
     }
     return Flex(
       mainAxisSize: MainAxisSize.min,
@@ -67,4 +67,98 @@ class BubbleTipWrapperWidget extends StatelessWidget {
   }
 }
 
+class BubbleTip extends StatelessWidget {
+  final PopupDirection direction;
+  final PopupAlign align;
+  final double? arrowPadding;
 
+  final Color? color;
+
+  final Widget content;
+  final EdgeInsetsGeometry? padding;
+  final BorderRadius? borderRadius;
+
+  const BubbleTip({
+    Key? key,
+    required this.direction,
+    required this.align,
+    required this.content,
+    this.arrowPadding,
+    this.color,
+    this.padding,
+    this.borderRadius,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BubbleTipWrapperWidget(
+      direction: direction,
+      align: align,
+      indicator: Image.asset(
+        'assets/images/bubble_bottom_indicator_black.png',
+        width: 25,
+        height: 13,
+        color: color,
+      ),
+      indicatorPadding: arrowPadding ?? 0,
+      child: Container(
+        color: color,
+        padding: padding,
+        decoration: BoxDecoration(
+          borderRadius: borderRadius,
+          color: color,
+        ),
+        child: content,
+      ),
+    );
+  }
+}
+
+PopupWindowRoute? showBubbleTip<T>({
+  required BuildContext context,
+  required BuildContext anchorContext,
+  PopupDirection direction = PopupDirection.top,
+  PopupAlign align = PopupAlign.end,
+  EdgeInsetsGeometry? margin,
+  Color? color,
+  double arrowPadding = 8,
+  required Widget content,
+  EdgeInsetsGeometry? contentPadding,
+  BorderRadius? borderRadius,
+  Duration? autoDismissDuration,
+}) {
+  PopupWindowRoute? route;
+  route = showPopupWindow<T>(
+    context: context,
+    anchorContext: context,
+    direction: direction,
+    align: align,
+    margin: margin,
+    settings: const RouteSettings(name: '/popup_window/bubble_tip'),
+    builder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation) {
+      return FadeTransition(
+        opacity: animation,
+        child: BubbleTip(
+          content: content,
+          direction: direction,
+          align: align,
+          arrowPadding: arrowPadding,
+          color: color,
+          padding: contentPadding,
+          borderRadius: borderRadius,
+        ),
+      );
+    },
+    onWindowDismiss: () {
+      route = null;
+    },
+  );
+  if (autoDismissDuration != null) {
+    Future.delayed(autoDismissDuration).then((value) {
+      route?.mayPop();
+    });
+  }
+
+  return route;
+}

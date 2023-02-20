@@ -11,18 +11,17 @@ typedef AnimatedWidgetBuilder = Widget Function(BuildContext context,
     Animation<double> animation, Animation<double> secondaryAnimation);
 
 class PopupWindowButton<T> extends StatefulWidget {
-  const PopupWindowButton(
-      {Key? key,
-      required this.buttonBuilder,
-      required this.windowBuilder,
-      this.direction,
-      this.align,
-      this.margin,
-      this.duration = 300,
-      this.onWindowShow,
-      this.onWindowDismiss})
-      : assert(buttonBuilder != null && windowBuilder != null),
-        super(key: key);
+  const PopupWindowButton({
+    Key? key,
+    required this.buttonBuilder,
+    required this.windowBuilder,
+    this.direction,
+    this.align,
+    this.margin,
+    this.duration = 300,
+    this.onWindowShow,
+    this.onWindowDismiss,
+  }) : super(key: key);
 
   /// 显示按钮button
   /// the builder for child,
@@ -83,7 +82,7 @@ class _PopupWindowButtonState<T> extends State<PopupWindowButton> {
   }
 }
 
-class _PopupWindowRoute<T> extends PopupRoute<T> {
+class _PopupWindowRoute<T> extends PopupRoute<T> with PopupWindowRoute {
   _PopupWindowRoute({
     required this.position,
     this.direction,
@@ -97,14 +96,16 @@ class _PopupWindowRoute<T> extends PopupRoute<T> {
     this.onWindowDismiss,
     required this.capturedThemes,
     this.constraints,
-  });
+    RouteSettings? settings,
+  }) : super(settings: settings);
 
   @override
   Animation<double> createAnimation() {
     return CurvedAnimation(
-        parent: super.createAnimation(),
-        curve: Curves.linear,
-        reverseCurve: const Interval(0.0, _kWindowCloseIntervalEnd));
+      parent: super.createAnimation(),
+      curve: Curves.linear,
+      reverseCurve: const Interval(0.0, _kWindowCloseIntervalEnd),
+    );
   }
 
   final RelativeRect position;
@@ -144,8 +145,11 @@ class _PopupWindowRoute<T> extends PopupRoute<T> {
   }
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     return CustomSingleChildLayout(
       delegate: _PopupWindowLayout(
         position,
@@ -165,8 +169,13 @@ class _PopupWindowRoute<T> extends PopupRoute<T> {
 }
 
 class _PopupWindowLayout extends SingleChildLayoutDelegate {
-  _PopupWindowLayout(this.position, this.textDirection, this.direction,
-      this.align, this.margin);
+  _PopupWindowLayout(
+    this.position,
+    this.textDirection,
+    this.direction,
+    this.align,
+    this.margin,
+  );
 
   // Rectangle of underlying button, relative to the overlay's dimensions.
   final RelativeRect position;
@@ -217,7 +226,7 @@ class _PopupWindowLayout extends SingleChildLayoutDelegate {
         maxWidth = biggest.width - position.left;
       } else if (isAlignRight) {
         /// 右对齐
-        maxWidth = position.right;
+        maxWidth = biggest.width - position.right;
       } else {
         /// 居中对齐
         maxWidth = biggest.width -
@@ -238,7 +247,7 @@ class _PopupWindowLayout extends SingleChildLayoutDelegate {
         /// 顶部对齐
         maxHeight = biggest.height - position.top;
       } else if (align == PopupAlign.end) {
-        maxHeight = position.bottom;
+        maxHeight = biggest.height - position.bottom;
       } else {
         maxHeight = biggest.height -
             position.top -
@@ -251,7 +260,7 @@ class _PopupWindowLayout extends SingleChildLayoutDelegate {
       maxHeight = position.bottom;
     }
 
-    print('getConstraintsForChild:  $maxWidth, $maxHeight');
+    print('getConstraintsForChild: $position, $maxWidth, $maxHeight');
     return BoxConstraints.loose(Size(maxWidth, maxHeight));
   }
 
@@ -288,7 +297,7 @@ class _PopupWindowLayout extends SingleChildLayoutDelegate {
         y = position.top;
       } else if (align == PopupAlign.end) {
         /// 底部对齐
-        y = size.height - position.bottom;
+        y = size.height - position.bottom - childSize.height;
       } else {
         y = (size.height - position.bottom + position.top) / 2 -
             childSize.height / 2 -
@@ -325,7 +334,7 @@ class _PopupWindowScope extends InheritedWidget {
   }
 }
 
-Future<T?> showWindow<T>({
+PopupWindowRoute<T> showWindow<T>({
   required BuildContext context,
   required RelativeRect position,
   int? duration,
@@ -336,27 +345,31 @@ Future<T?> showWindow<T>({
   required AnimatedWidgetBuilder builder,
   VoidCallback? onWindowShow,
   VoidCallback? onWindowDismiss,
+  RouteSettings? settings,
 }) {
   final NavigatorState navigator = Navigator.of(context);
-  return navigator.push(
-    _PopupWindowRoute<T>(
-      position: position,
-      duration: duration,
-      semanticLabel: semanticLabel,
-      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      builder: builder,
-      direction: direction,
-      align: align,
-      margin: margin,
-      onWindowShow: onWindowShow,
-      onWindowDismiss: onWindowDismiss,
-      capturedThemes:
-          InheritedTheme.capture(from: context, to: navigator.context),
+  final route = _PopupWindowRoute<T>(
+    position: position,
+    duration: duration,
+    semanticLabel: semanticLabel,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    builder: builder,
+    direction: direction,
+    align: align,
+    margin: margin,
+    onWindowShow: onWindowShow,
+    onWindowDismiss: onWindowDismiss,
+    settings: settings,
+    capturedThemes: InheritedTheme.capture(
+      from: context,
+      to: navigator.context,
     ),
   );
+  navigator.push(route);
+  return route;
 }
 
-Future<T?> showPopupWindow<T>({
+PopupWindowRoute<T>? showPopupWindow<T>({
   required BuildContext context,
   required BuildContext anchorContext,
   required AnimatedWidgetBuilder builder,
@@ -366,10 +379,30 @@ Future<T?> showPopupWindow<T>({
   int? duration,
   VoidCallback? onWindowShow,
   VoidCallback? onWindowDismiss,
-}) async {
+  RouteSettings? settings,
+}) {
+  final RelativeRect? position = findAnchorPosition(anchorContext);
+  if (position == null) return null;
+  return showWindow<T>(
+    context: context,
+    position: position,
+    duration: duration,
+    builder: builder,
+    direction: direction,
+    align: align,
+    margin: margin,
+    onWindowShow: onWindowShow,
+    settings: settings,
+    onWindowDismiss: onWindowDismiss,
+  );
+}
+
+RelativeRect? findAnchorPosition(BuildContext anchorContext) {
   final RenderBox? button = anchorContext.findRenderObject() as RenderBox?;
-  final RenderBox? overlay =
-      Navigator.of(context).overlay?.context.findRenderObject()! as RenderBox?;
+  final RenderBox? overlay = Navigator.of(anchorContext)
+      .overlay
+      ?.context
+      .findRenderObject() as RenderBox?;
   if (button == null || overlay == null) return null;
   final RelativeRect position = RelativeRect.fromRect(
     Rect.fromPoints(
@@ -379,17 +412,7 @@ Future<T?> showPopupWindow<T>({
     ),
     Offset.zero & overlay.size,
   );
-  print('showPopupWindow: $position， ${overlay.size}');
-  return await showWindow<T>(
-      context: context,
-      position: position,
-      duration: duration,
-      builder: builder,
-      direction: direction,
-      align: align,
-      margin: margin,
-      onWindowShow: onWindowShow,
-      onWindowDismiss: onWindowDismiss);
+  return position;
 }
 
 /// 位于目标位置的方位
@@ -401,20 +424,22 @@ enum PopupDirection {
 }
 
 extension PopupDirectionExt on PopupDirection {
+  bool get isHorizontal =>
+      this == PopupDirection.start || this == PopupDirection.end;
 
-  bool get isHorizontal => this == PopupDirection.start || this == PopupDirection.end;
+  bool get isVertical =>
+      this == PopupDirection.top || this == PopupDirection.bottom;
 
-  bool get isVertical => this == PopupDirection.top || this == PopupDirection.bottom;
-
-  bool isLtr(BuildContext context) => Directionality.of(context) == TextDirection.ltr;
+  bool isLtr(BuildContext context) =>
+      Directionality.of(context) == TextDirection.ltr;
 
   bool isLeft(BuildContext context) =>
       (isLtr(context) && this == PopupDirection.start) ||
-          (!isLtr(context) && this == PopupDirection.end);
+      (!isLtr(context) && this == PopupDirection.end);
 
   bool isRight(BuildContext context) =>
       (isLtr(context) && this == PopupDirection.end) ||
-          (!isLtr(context) && this == PopupDirection.start);
+      (!isLtr(context) && this == PopupDirection.start);
 }
 
 /// 位于目标位置的对齐
@@ -424,3 +449,11 @@ enum PopupAlign {
   end,
 }
 
+mixin PopupWindowRoute<T> on PopupRoute<T> {
+  void mayPop() {
+    final BuildContext? context = subtreeContext;
+    if (context != null) {
+      Navigator.of(context).pop();
+    }
+  }
+}

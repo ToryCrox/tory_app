@@ -22,42 +22,65 @@ class _BubbleTipDemoState extends State<BubbleTipDemo> {
   }
 
   Widget _buildBody() {
-    final direction = PopupDirection.end;
-    final align = PopupAlign.start;
-    final margin = const EdgeInsetsDirectional.only(
-        start: 0, end: 0, top: 0, bottom: 0);
+    final direction = PopupDirection.top;
+    final align = PopupAlign.end;
+    final margin =
+        const EdgeInsetsDirectional.only(start: 0, end: 10, top: 0, bottom: 0);
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 0),
       child: Stack(
         children: [
           Center(
-            child: PopupWindowButton(
-              direction: direction,
-              align: align,
-              margin: margin,
-              buttonBuilder: (BuildContext context) {
-                return const Text('Test Popup');
-              },
-              windowBuilder: (BuildContext context, Animation<double> animation,
-                  Animation<double> secondaryAnimation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: BubbleTipWrapperWidget(
-                    direction: direction,
-                    align: align,
-                    indicator: Icon(Icons.arrow_downward),
-                    child: Container(
-                      color: Colors.greenAccent,
-                      padding: EdgeInsets.all(10),
-                      child: Text('TTTTTTTTTTTTTTDDDDDDDDDDDDDEEEEEEEEEEEE'),
-                    ),
-                  ),
+            // child: PopupWindowButton(
+            //   direction: direction,
+            //   align: align,
+            //   margin: margin,
+            //   buttonBuilder: (BuildContext context) {
+            //     return const Text('Test Popup');
+            //   },
+            //   windowBuilder: (BuildContext context, Animation<double> animation,
+            //       Animation<double> secondaryAnimation) {
+            //     return FadeTransition(
+            //       opacity: animation,
+            //       child: BubbleTipWrapperWidget(
+            //         direction: direction,
+            //         align: align,
+            //         indicator: Image.asset(
+            //           'assets/images/bubble_bottom_indicator_black.png',
+            //           width: 25,
+            //           height: 13,
+            //           color: Colors.greenAccent,
+            //         ),
+            //         //const Icon(Icons.arrow_downward),
+            //         indicatorPadding: 6,
+            //         child: Container(
+            //           color: Colors.greenAccent,
+            //           padding: EdgeInsets.all(10),
+            //           child: Text('TTTTTTTTTTTTTTDDDDDDDDDDDDDEEEEEEEEEEEE'),
+            //         ),
+            //       ),
+            //     );
+            //   },
+            // ),
+            child: ElevatedButton(
+              key: btnKey,
+              onPressed: () {
+                final context = btnKey.currentContext;
+                if (context == null) return;
+                showBubbleTip(
+                  context: context,
+                  anchorContext: context,
+                  content: Text('测试；AAAAAAAAAAAAAAAAAAAAAAAAAA'),
+                  autoDismissDuration: Duration(seconds: 2),
                 );
               },
+              child: Text('Test'),
             ),
           )
         ],
       ),
     );
   }
+
+  final btnKey = GlobalKey();
 }
