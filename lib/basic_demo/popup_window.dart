@@ -275,42 +275,38 @@ class _PopupWindowLayout extends SingleChildLayoutDelegate {
     double x = 0;
     if (isTop || isBottom) {
       if (isAlignLeft) {
-        x = position.left;
+        x = position.left + margin.left;
       } else if (isAlignRight) {
-        x = size.width - position.right - childSize.width;
+        x = size.width - position.right - childSize.width - margin.right;
       } else {
         x = (size.width - position.right + position.left) / 2 -
             childSize.width / 2 -
-            (margin.left + margin.right) / 2;
+            (margin.left + margin.right) / 2 + margin.left;
       }
     } else if (isLeft) {
-      x = 0;
+      x = position.left - childSize.width - margin.right;
     } else if (isRight) {
-      x = size.width - position.right;
+      x = size.width - position.right + margin.left;
     }
-    x += margin.left;
 
     double y = 0;
     if (isLeft || isRight) {
       if (align == PopupAlign.start) {
         /// 顶部对齐
-        y = position.top;
+        y = position.top + margin.top;
       } else if (align == PopupAlign.end) {
         /// 底部对齐
-        y = size.height - position.bottom - childSize.height;
+        y = size.height - position.bottom - childSize.height - margin.bottom;
       } else {
         y = (size.height - position.bottom + position.top) / 2 -
             childSize.height / 2 -
-            (margin.top + margin.bottom) / 2;
+            (margin.top + margin.bottom) / 2 + margin.top;
       }
     } else if (isTop) {
-      y = position.top - childSize.height;
+      y = position.top - childSize.height - margin.bottom;
     } else if (isBottom) {
-      y = size.height - position.bottom;
+      y = size.height - position.bottom + margin.top;
     }
-    y += margin.top;
-    print(
-        'getPositionForChild: $x, ${size.width}, childWidth:${childSize.width}');
 
     return Offset(x, y);
   }

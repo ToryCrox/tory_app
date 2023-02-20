@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'popup_window.dart';
 
@@ -78,6 +79,8 @@ class BubbleTip extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final BorderRadius? borderRadius;
 
+  final BoxConstraints? constraints;
+
   const BubbleTip({
     Key? key,
     required this.direction,
@@ -87,6 +90,7 @@ class BubbleTip extends StatelessWidget {
     this.color,
     this.padding,
     this.borderRadius,
+    this.constraints,
   }) : super(key: key);
 
   @override
@@ -96,14 +100,14 @@ class BubbleTip extends StatelessWidget {
       align: align,
       indicator: Image.asset(
         'assets/images/bubble_bottom_indicator_black.png',
-        width: 25,
-        height: 13,
+        width: 19,
+        height: 9.59,
         color: color,
       ),
       indicatorPadding: arrowPadding ?? 0,
       child: Container(
-        color: color,
         padding: padding,
+        constraints: constraints,
         decoration: BoxDecoration(
           borderRadius: borderRadius,
           color: color,
@@ -121,11 +125,12 @@ PopupWindowRoute? showBubbleTip<T>({
   PopupAlign align = PopupAlign.end,
   EdgeInsetsGeometry? margin,
   Color? color,
-  double arrowPadding = 8,
+  double? arrowPadding,
   required Widget content,
   EdgeInsetsGeometry? contentPadding,
   BorderRadius? borderRadius,
   Duration? autoDismissDuration,
+  BoxConstraints? constraints,
 }) {
   PopupWindowRoute? route;
   route = showPopupWindow<T>(
@@ -133,20 +138,28 @@ PopupWindowRoute? showBubbleTip<T>({
     anchorContext: context,
     direction: direction,
     align: align,
-    margin: margin,
+    margin: margin ?? const EdgeInsetsDirectional.only(bottom: 12, end: -6),
     settings: const RouteSettings(name: '/popup_window/bubble_tip'),
     builder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation) {
       return FadeTransition(
         opacity: animation,
-        child: BubbleTip(
-          content: content,
-          direction: direction,
-          align: align,
-          arrowPadding: arrowPadding,
-          color: color,
-          padding: contentPadding,
-          borderRadius: borderRadius,
+        child: DefaultTextStyle(
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.white,
+          ),
+          child: BubbleTip(
+            content: content,
+            direction: direction,
+            align: align,
+            arrowPadding: arrowPadding ?? 13,
+            color: color ?? const Color(0xF07039FF),
+            constraints: constraints ?? const BoxConstraints(maxWidth: 192),
+            padding: contentPadding ??
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            borderRadius: borderRadius ?? BorderRadius.circular(6),
+          ),
         ),
       );
     },

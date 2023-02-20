@@ -70,8 +70,11 @@ class _BubbleTipDemoState extends State<BubbleTipDemo> {
                 showBubbleTip(
                   context: context,
                   anchorContext: context,
-                  content: Text('测试；AAAAAAAAAAAAAAAAAAAAAAAAAA'),
-                  autoDismissDuration: Duration(seconds: 2),
+                  content: Container(
+                      color: Colors.orange,
+                      child: const Text(
+                          'Here you can set whether to enter the room automatically on the table~')),
+                  //autoDismissDuration: const Duration(seconds: 5),
                 );
               },
               child: Text('Test'),
