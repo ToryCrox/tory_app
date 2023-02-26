@@ -118,19 +118,21 @@ class BubbleTip extends StatelessWidget {
   }
 }
 
-PopupWindowRoute? showBubbleTip<T>({
+VoidCallback? showBubbleTip<T>({
   required BuildContext context,
   required BuildContext anchorContext,
+  bool followAnchor = false,
   PopupDirection direction = PopupDirection.top,
   PopupAlign align = PopupAlign.end,
-  EdgeInsetsGeometry? margin,
-  Color? color,
-  double? arrowPadding,
+  EdgeInsetsGeometry margin = const EdgeInsetsDirectional.only(bottom: 0, end: 0),
+  Color color = const Color(0xF07039FF),
+  double arrowPadding = 13,
+  Duration? barrierDuration,
   required Widget content,
-  EdgeInsetsGeometry? contentPadding,
-  BorderRadius? borderRadius,
+  EdgeInsetsGeometry contentPadding = const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+  BorderRadius borderRadius = const BorderRadius.all(Radius.circular(6)),
   Duration? autoDismissDuration,
-  BoxConstraints? constraints,
+  BoxConstraints? constraints = const BoxConstraints(maxWidth: 192),
 }) {
   PopupWindowRoute? route;
   route = showPopupWindow<T>(
@@ -138,7 +140,9 @@ PopupWindowRoute? showBubbleTip<T>({
     anchorContext: context,
     direction: direction,
     align: align,
-    margin: margin ?? const EdgeInsetsDirectional.only(bottom: 12, end: -6),
+    margin: margin,
+    followAnchor: followAnchor,
+    barrierDuration: const Duration(seconds: 1),
     settings: const RouteSettings(name: '/popup_window/bubble_tip'),
     builder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation) {
@@ -154,11 +158,10 @@ PopupWindowRoute? showBubbleTip<T>({
             direction: direction,
             align: align,
             arrowPadding: arrowPadding ?? 13,
-            color: color ?? const Color(0xF07039FF),
-            constraints: constraints ?? const BoxConstraints(maxWidth: 192),
-            padding: contentPadding ??
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            borderRadius: borderRadius ?? BorderRadius.circular(6),
+            color: color,
+            constraints: constraints,
+            padding: contentPadding,
+            borderRadius: borderRadius,
           ),
         ),
       );
@@ -172,6 +175,7 @@ PopupWindowRoute? showBubbleTip<T>({
       route?.mayPop();
     });
   }
-
-  return route;
+  return () {
+    route?.mayPop();
+  };
 }

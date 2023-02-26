@@ -68,6 +68,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+  flutter_svg: ^1.1.6
 
   flutter_ume: ^1.0.1
   flutter_ume_kit_ui: ^1.0.0

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 const int _windowPopupDuration = 300;
 const double _kWindowCloseIntervalEnd = 2.0 / 3.0;
@@ -45,18 +44,18 @@ class PopupWindowButton<T> extends StatefulWidget {
   final VoidCallback? onWindowDismiss;
 
   @override
-  _PopupWindowButtonState createState() {
-    return _PopupWindowButtonState();
+  PopupWindowButtonState createState() {
+    return PopupWindowButtonState();
   }
 
-  static _PopupWindowButtonState? of(BuildContext context) {
+  static PopupWindowButtonState? of(BuildContext context) {
     final _PopupWindowScope? scope =
     context.dependOnInheritedWidgetOfExactType<_PopupWindowScope>();
     return scope?.state;
   }
 }
 
-class _PopupWindowButtonState<T> extends State<PopupWindowButton> {
+class PopupWindowButtonState<T> extends State<PopupWindowButton> {
   void showPopup() {
     showPopupWindow<T>(
       context: context,
@@ -162,7 +161,6 @@ class _PopupWindowRoute<T> extends PopupRoute<T> with PopupWindowRoute {
   Widget buildPage(BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,) {
-    print('_autoAdjustPositionByAnchor buildPage--------');
     return _PopupPageWidget(
       key: _popupPageKey,
       position: position,
@@ -182,11 +180,10 @@ class _PopupWindowRoute<T> extends PopupRoute<T> with PopupWindowRoute {
 
   void _autoAdjustPositionByAnchor(BuildContext anchorContext) {
     final position = findAnchorPosition(anchorContext);
-    print('_autoAdjustPositionByAnchor $position');
     if (position != null && this.position != position) {
       this.position = position;
       _popupPageKey.currentState?.updatePosition(position);
-      print('_autoAdjustPositionByAnchor update......');
+      debugPrint('_autoAdjustPositionByAnchor update......');
     }
     if (!_isShow) return;
     WidgetsBinding.instance.addPostFrameCallback((t) =>
@@ -338,7 +335,6 @@ class _PopupWindowLayout extends SingleChildLayoutDelegate {
       maxHeight = position.bottom;
     }
 
-    print('getConstraintsForChild: $position, $maxWidth, $maxHeight');
     return BoxConstraints.loose(Size(maxWidth, maxHeight));
   }
 
@@ -404,7 +400,7 @@ class _PopupWindowScope extends InheritedWidget {
       {Key? key, required this.state, required Widget child})
       : super(key: key, child: child);
 
-  final _PopupWindowButtonState state;
+  final PopupWindowButtonState state;
 
   @override
   bool updateShouldNotify(_PopupWindowScope oldWidget) {

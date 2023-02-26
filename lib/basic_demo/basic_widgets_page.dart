@@ -1,7 +1,9 @@
 // @ignore_hardcode
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BasicWidgetsPage extends StatefulWidget {
   const BasicWidgetsPage({Key? key}) : super(key: key);
@@ -11,14 +13,11 @@ class BasicWidgetsPage extends StatefulWidget {
 }
 
 class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
-  var _isSwitchSelected = false;
-  var _isCheckboxSelected = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("基础组件测试"),
+        title: const Text("基础组件测试"),
       ),
       body: ListView(
         children: [
@@ -27,62 +26,15 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
           const SizedBox(
             height: 10,
           ),
-          SizedBox(
-            height: 1,
-            child: LinearProgressIndicator(
-              backgroundColor: Colors.grey[200],
-              valueColor: const AlwaysStoppedAnimation(Colors.blue),
-            ),
-          ),
-          // 圆形进度条直径指定为100
-          Center(
-            child: SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.grey[200],
-                valueColor: const AlwaysStoppedAnimation(Colors.blue),
-              ),
-            ),
+          Container(
+            alignment: Alignment.center,
+            child: Container(
+                width: 88,
+                height: 76,
+                color: const Color(0xF0191222),
+                child: _buildSettingItem()),
           ),
           //buildSpinKit(context),
-          Center(
-              child: RoomVipButton(
-            onTap: () {},
-            text: "退出贵宾",
-          )),
-          _buildVipHeader(),
-          _buildBorderTest(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildVipHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          PositionedDirectional(
-            start: 0,
-            top: 0,
-            bottom: 0,
-            child: IconButton(
-              icon: const BackButtonIcon(),
-              iconSize: 14,
-              onPressed: () {
-                Navigator.maybePop(context);
-              },
-            ),
-          ),
-          Text(
-            "我开通的贵宾",
-            style: TextStyle(
-              fontSize: 18,
-              color: Color(0xFF313131),
-            ),
-          )
         ],
       ),
     );
@@ -157,20 +109,38 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
     ];
   }
 
+  var _isSwitchSelected = false;
+  var _isCheckboxSelected = false;
+
   /// switch和checkbox测试
   Widget createSwitchAnCheckBoxWidget() {
     return Row(
       children: [
         Expanded(
-          child: Switch(
-            value: _isSwitchSelected,
-            onChanged: (value) {
-              setState(() {
-                _isSwitchSelected = !_isSwitchSelected;
-              });
-            },
+          child: Center(
+            child: SizedBox(
+              width: 20,
+              height: 20,
+              child: Switch.adaptive(
+                value: _isSwitchSelected,
+                onChanged: (value) {
+                  setState(() {
+                    _isSwitchSelected = !_isSwitchSelected;
+                  });
+                },
+              ),
+            ),
           ),
         ),
+        Expanded(
+            child: CupertinoSwitch(
+          value: _isSwitchSelected,
+          onChanged: (value) {
+            setState(() {
+              _isSwitchSelected = !_isSwitchSelected;
+            });
+          },
+        )),
         Expanded(
           child: Checkbox(
             value: _isCheckboxSelected,
@@ -187,61 +157,42 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
     );
   }
 
-  Widget _buildBorderTest() {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          width: 100,
-          height: 100,
-          decoration:  BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.red, width: 2),
+  Widget _buildSettingItem() {
+    return GestureDetector(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 6),
+          Stack(
+            children: [
+              Image.asset(
+                'assets/images/ic_auto_mic.png',
+                width: 40,
+                height: 40,
+              ),
+              PositionedDirectional(
+                bottom: 0,
+                end: 0,
+                child: SvgPicture.asset(
+                  'assets/images/ic_cupertino_switch_open.svg',
+                  width: 16,
+                  height: 10,
+                ),
+              )
+            ],
           ),
-        ),
-        Container(
-          width: 100,
-          height: 100,
-          decoration:  BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.blue, width: 40),
-          ),
-        )
-
-      ],
-    );
-  }
-}
-
-class RoomVipButton extends StatelessWidget {
-  final VoidCallback onTap;
-  final String text;
-
-  const RoomVipButton({
-    Key? key,
-    required this.onTap,
-    required this.text,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Ink(
-        decoration: BoxDecoration(
-            gradient: const LinearGradient(
-                colors: [Color(0xFF7458EA), Color(0xFF5A0FB3)]),
-            borderRadius: BorderRadius.circular(14)),
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Container(
-          constraints: const BoxConstraints(minWidth: 60, minHeight: 28),
-          alignment: Alignment.center,
-          child: Text(
-            text,
-            maxLines: 1,
-            style: const TextStyle(color: Colors.white, fontSize: 11),
-          ),
-        ),
+          const SizedBox(height: 6),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              'Auto-start microphone',
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: Color(0xFFBABABA), fontSize: 11, height: 1),
+            ),
+          )
+        ],
       ),
     );
   }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="10px" viewBox="0 0 16 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>开关/1</title>
+    <g id="房间自由上麦" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="翻译" transform="translate(-292.000000, -934.000000)">
+            <g id="编组备份" transform="translate(109.000000, 556.000000)">
+                <g id="有色组" transform="translate(47.000000, 104.000000)">
+                    <g id="编组-2备份-10" transform="translate(88.000000, 238.000000)">
+                        <g id="编组" transform="translate(48.000000, 36.000000)">
+                            <rect id="矩形" stroke="#7039FF" fill="#7039FF" x="1" y="1" width="14" height="8" rx="4"></rect>
+                            <circle id="椭圆形" fill="#FFFFFF" cx="10.9860759" cy="5" r="3.5"></circle>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

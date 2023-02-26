@@ -87,7 +87,9 @@ class MyApp extends StatelessWidget {
       ),
       builder: (context, child) {
         debugPrint("");
-        return child ?? Container();
+        return Directionality(
+            textDirection: TextDirection.ltr,
+            child: child ?? Container());
       },
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
       routes: {
