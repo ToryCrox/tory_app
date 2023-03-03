@@ -12,6 +12,9 @@ class TextUtil {
   }
 
 
+  /// 判断是否是http url
+  /// [s] url
+  /// [return] true: 是http url
   static bool isHttpUrl(String? s) {
     if (isEmpty(s)) {
       return false;
@@ -25,6 +28,10 @@ class TextUtil {
     return matches(regexUrl, input);
   }
 
+  /// Return whether input matches regex.
+  /// [regex] regex
+  /// [input] input
+  /// [return] true: matches
   static bool matches(String regex, String input) {
     if (input.isEmpty) return false;
     return RegExp(regex).hasMatch(input);
