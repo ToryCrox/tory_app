@@ -14,6 +14,9 @@ class ThrottleInkWell extends StatefulWidget {
   /// 长按事件
   final GestureLongPressCallback? onLongPress;
 
+  /// 是否有水波纹
+  final bool enableFeedback;
+
   /// 屏蔽多长时间内的重复点击，默认500ms
   final int throttleTime;
 
@@ -49,6 +52,7 @@ class ThrottleInkWell extends StatefulWidget {
     this.width,
     this.height,
     this.padding,
+    this.enableFeedback = true,
   }) : super(key: key);
 
   @override
@@ -91,7 +95,8 @@ class _ThrottleInkWellState extends State<ThrottleInkWell> {
         onLongPress: widget.onLongPress,
         customBorder: widget.shape,
         borderRadius: widget.borderRadius,
-        child: widget.child,
+        enableFeedback: widget.enableFeedback,
+        child: child,
       ),
     );
   }

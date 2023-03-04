@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 /// 缩放控件，可以同时缩放控件大小，只用Transform.scale的话无法缩放控件大小
+/// 通过textAligned设置文字的对齐方式，缩放后保证baseline对齐
+/// 通过scale设置缩放比例
+/// 通过child设置子控件
 class ScaleSizeWidget extends SingleChildRenderObjectWidget {
   ScaleSizeWidget({
     Key? key,

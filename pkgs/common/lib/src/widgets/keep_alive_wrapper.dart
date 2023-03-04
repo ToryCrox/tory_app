@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 /// 列表组件或者PageView组件中保存子组件状态
 ///
 /// 参见[https://book.flutterchina.club/chapter6/keepalive.html#_6-8-1-automatickeepalive]
+/// - [keepAlive] 是否保持子组件状态, 默认为true
 class KeepAliveWrapper extends StatefulWidget {
   const KeepAliveWrapper({
     Key? key,

@@ -1,5 +1,6 @@
 // @ignore_hardcode
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -35,6 +36,23 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
                 child: _buildSettingItem()),
           ),
           //buildSpinKit(context),
+          const SizedBox(height: 10),
+          Center(
+            child: GeneralGradientButton(
+              //width: 300,
+              constraints: BoxConstraints(minHeight: 48, minWidth: 200),
+              child: Center(child: Text('GeneralGradientButton')),
+              //margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              onTap: () {
+                debugPrint('GeneralGradientButton');
+              },
+              //shape: const StadiumBorder(),
+              borderRadius: 16,
+              //padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              colors: [Colors.blue[700]!, Colors.blue[200]!],
+            ),
+          ),
+          const SizedBox(height: 10),
         ],
       ),
     );
@@ -189,7 +207,8 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
               maxLines: 2,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Color(0xFFBABABA), fontSize: 11, height: 1),
+              style:
+                  TextStyle(color: Color(0xFFBABABA), fontSize: 11, height: 1),
             ),
           )
         ],

@@ -15,7 +15,8 @@ class Throttle {
   Throttle({Duration duration = const Duration(milliseconds: 800)})
       : _duration = duration;
 
-  ///[preventFuc]处于节流状态的回调
+  /// [preventFuc]处于节流状态的回调
+  /// [func] 行为方法
   void call(FutureOr<void> Function()? func, {Function? preventFuc}) async {
     if (func == null) return;
     if (_enable) {

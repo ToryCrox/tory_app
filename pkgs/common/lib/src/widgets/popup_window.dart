@@ -451,11 +451,21 @@ PopupWindowRoute<T> showWindow<T>({
   return route;
 }
 
-///
-/// @anchorContext 相对的Widget对应的Context
-/// @followAnchor 是否跟随相对的widget
-/// @dismissible 是否可以点击空白处消失
-/// @barrierDuration 多长时间内点击空白处不消失，防止误触
+/// 显示一个PopupWindow
+/// - [context] 当前的Widget对应的Context
+/// - [anchorContext] 相对的Widget对应的Context
+/// - [followAnchor] 是否跟随相对的widget
+/// - [dismissible] 是否可以点击空白处消失
+/// - [builder] window的内容
+/// - [barrierDuration] 多长时间内点击空白处不消失，防止误触
+/// - [onWindowShow] 显示时回调
+/// - [onWindowDismiss] 消失时回调
+/// - [direction] window位于anchor的方向，上下左右
+/// - [align] window在方向上的对齐方式，左中右
+/// - [margin] window与anchor的间距
+/// - [duration] 动画时长
+/// - [barrierDuration] 点击空白处消失的延迟时间
+/// - [settings] 路由设置
 PopupWindowRoute<T>? showPopupWindow<T>({
   required BuildContext context,
   required BuildContext anchorContext,
