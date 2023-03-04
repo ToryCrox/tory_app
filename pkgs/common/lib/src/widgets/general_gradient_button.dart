@@ -25,7 +25,7 @@ import '../../common.dart';
 
 class GeneralGradientButton extends StatelessWidget {
   final Widget child;
-  final GestureTapCallback? onTap;
+  final OnTapThrottle? onTap;
   final Color? color;
   final List<Color>? colors;
   final AlignmentGeometry? begin;

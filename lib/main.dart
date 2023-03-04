@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:alloo_demo/alloo_demo.dart';
 import 'package:banban_demo/banban_navi_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -206,6 +207,10 @@ class _MyHomePageState extends State<MyHomePage> with LifeStateOwnerMixin {
         RoutePageItem(
           title: "三方库测试",
           builder: (context) => const ThirdPackageDemoPage(),
+        ),
+        RoutePageItem(
+          title: "Alloo相关测试",
+          builder: (context) => const AllooMainPage(),
         ),
 
       ],
