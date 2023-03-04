@@ -1,10 +1,12 @@
 library common;
 
 export 'package:collection/collection.dart';
+export 'package:dog/dog.dart';
 
 export 'src/extensions/iterable_extension.dart';
 export 'src/extensions/list_extension.dart';
 export 'src/extensions/map_extension.dart';
+export 'src/extensions/dynamic_type_extension.dart';
 
 export 'src/utils/type_util.dart';
 export 'src/utils/text_util.dart';

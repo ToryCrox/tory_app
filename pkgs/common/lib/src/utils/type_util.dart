@@ -7,6 +7,14 @@ import 'package:flutter/material.dart';
 class TypeUtil {
   TypeUtil._();
 
+  /// 基本类型
+  static const _primitiveTypes = {'int', 'double', 'num', 'bool'};
+
+  /// 是否为原始类型
+  static bool isPrimitiveType(String type) {
+    return _primitiveTypes.contains(type);
+  }
+
   /// 转换成int
   /// 如果value是bool，则true转换成1， false为0
   static int parseInt(dynamic value, [int defaultValue = 0]) {
@@ -140,4 +148,5 @@ class TypeUtil {
     if (value is int) return Color(value);
     return defaultValue;
   }
+
 }

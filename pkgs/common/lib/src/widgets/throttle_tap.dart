@@ -11,6 +11,9 @@ class ThrottleInkWell extends StatefulWidget {
   /// 点击任务未完成再次点击无效
   final OnTapThrottle? onTap;
 
+  /// 长按事件
+  final GestureLongPressCallback? onLongPress;
+
   /// 屏蔽多长时间内的重复点击，默认500ms
   final int throttleTime;
 
@@ -38,6 +41,7 @@ class ThrottleInkWell extends StatefulWidget {
     this.child,
     this.onTap,
     this.throttleTime = 500,
+    this.onLongPress,
     this.borderRadius,
     this.color,
     this.shape,
@@ -84,6 +88,7 @@ class _ThrottleInkWellState extends State<ThrottleInkWell> {
       elevation: widget.elevation,
       child: InkWell(
         onTap: _isTaping || widget.onTap == null ? null : _doTap,
+        onLongPress: widget.onLongPress,
         customBorder: widget.shape,
         borderRadius: widget.borderRadius,
         child: widget.child,

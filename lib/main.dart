@@ -11,6 +11,7 @@ import 'package:tory_app/layout/basic_layout_page.dart';
 import 'package:tory_app/basic_demo/basic_widgets_page.dart';
 import 'package:tory_app/basic_demo/image_icon_route.dart';
 import 'package:tory_app/basic_demo/new_route_demo.dart';
+import 'package:tory_app/third/third_packege_demo.dart';
 import 'package:tory_base/tory_base.dart';
 
 import 'package:flutter_ume/flutter_ume.dart'; // UME framework
@@ -26,6 +27,7 @@ import 'basic_demo/bubble_tip_demo.dart';
 import 'basic_demo/function_widgets_demo.dart';
 import 'basic_demo/sliver/sliver_navi_page.dart';
 import 'dev/shared_preferences_list.dart';
+import 'third/location_demo_page.dart';
 
 void main() {
   var onError = FlutterError.onError; //先将 onerror 保存起来
@@ -201,7 +203,10 @@ class _MyHomePageState extends State<MyHomePage> with LifeStateOwnerMixin {
           title: "SharedPreferencesListPage",
           builder: (context) => const SharedPreferencesListPage(),
         ),
-
+        RoutePageItem(
+          title: "三方库测试",
+          builder: (context) => const ThirdPackageDemoPage(),
+        ),
 
       ],
     );

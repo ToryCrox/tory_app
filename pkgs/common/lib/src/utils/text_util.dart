@@ -2,6 +2,8 @@
 
 class TextUtil {
 
+  TextUtil._();
+
   /// Regex of url.
   static const String regexUrl = '[a-zA-Z]+://[^\\s]*';
 

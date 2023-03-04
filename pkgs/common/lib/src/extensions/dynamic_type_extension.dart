@@ -8,7 +8,7 @@ import '../../common.dart';
 /// 都用to为前缀，例如 int get toInt => TypeUtil.parseInt(this)
 /// 实现了一些常用的类型转换，例如：int, double, bool, String, List, , Map, Set, Color
 /// 其中因为toString是关键字，所以用toJsonString代替
-extension TypeExtension on dynamic {
+extension DynamicTypeExtension on dynamic {
   /// 转换成int
   /// 如果value是bool，则true转换成1， false为0
   int get toInt => TypeUtil.parseInt(this);
@@ -22,7 +22,7 @@ extension TypeExtension on dynamic {
   /// 转换成String
   /// 如果value是bool，则true转换成'1'， false为'0'
   /// 如果value是Map或List, Set，则转换成json字符串
-  String get toStr => TypeUtil.parseString(this);
+  String get toJsonString => TypeUtil.parseString(this);
 
   /// 转换成double
   /// 如果value是bool，则true转换成1.0， false为0.0
@@ -52,5 +52,4 @@ extension TypeExtension on dynamic {
   /// 如果value是String，则转换成Color
   Color get toColor => TypeUtil.parseColor(this);
 }
-
 
