@@ -7,15 +7,18 @@ import 'package:flutter/material.dart';
 /// - [borderRadius] 默认圆角为[BorderRadius.circular(6)]，可以修改
 /// - [padding] 默认内边距为[EdgeInsets.symmetric(horizontal: 20, vertical: 10)]，可以修改
 /// - [height] 默认高度为[42]，可以修改
-/// - [margin] 默认外边距为[EdgeInsets.symmetric(horizontal: 20, vertical: 0)]，可以修改
+/// - [margin] 外边距，默认为null
 /// - [onTap] 点击事件
 
 class AllooGradientButton extends GeneralGradientButton {
+
   const AllooGradientButton({
     Key? key,
     required Widget child,
     required OnTapThrottle onTap,
+    TextStyle? textStyle,
     List<Color>? colors,
+    Color? color,
     double? borderRadius,
     EdgeInsetsGeometry? padding,
     double? height,
@@ -24,13 +27,14 @@ class AllooGradientButton extends GeneralGradientButton {
           key: key,
           onTap: onTap,
           child: child,
-          colors: colors ?? const [Color(0xFFB77DFF), Color(0xFF7658FF)],
+          textStyle: textStyle,
+          colors: color != null ? null : colors ?? const [Color(0xFFB77DFF), Color(0xFF7658FF)],
+          color: color,
           borderRadius: borderRadius ?? 6.0,
           padding: padding ??
               const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           height: height ?? 42,
-          margin:
-              margin ?? const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          margin: margin,
         );
 
   AllooGradientButton.text({
@@ -38,6 +42,7 @@ class AllooGradientButton extends GeneralGradientButton {
     required String text,
     required OnTapThrottle onTap,
     List<Color>? colors,
+    TextStyle? textStyle,
     double? borderRadius,
     EdgeInsetsGeometry? padding,
     double? height,
@@ -45,15 +50,13 @@ class AllooGradientButton extends GeneralGradientButton {
   }) : super(
           key: key,
           onTap: onTap,
-          child: Center(
-              child: Text(text,
-                  style: const TextStyle(color: Colors.white, fontSize: 16))),
+          child: Center(child: Text(text)),
+          textStyle: textStyle,
           colors: colors ?? const [Color(0xFFB77DFF), Color(0xFF7658FF)],
           borderRadius: borderRadius ?? 6.0,
           padding: padding ??
               const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           height: height ?? 42,
-          margin:
-              margin ?? const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          margin: margin,
         );
 }

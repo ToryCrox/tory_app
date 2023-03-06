@@ -6,6 +6,8 @@ import '../../common.dart';
 /// - 内部的点击使用ThrottleInkWell实现
 /// - 内部空间默认居中
 /// - 默认字体颜色为Colors.white
+/// - 通过[child]设置子控件
+/// - 通过[textStyle]设置字体样式, 默认为颜色为Colors.white，字体大小为16，字重为FontWeight.w600
 /// - 通过[width]设置宽度，可空，默认包裹子控件
 /// - 通过[height]设置高度，可空，默认包裹子控件
 /// - 通过[constraints]设置约束，可空，默认为null
@@ -25,6 +27,7 @@ import '../../common.dart';
 
 class GeneralGradientButton extends StatelessWidget {
   final Widget child;
+  final TextStyle? textStyle;
   final OnTapThrottle? onTap;
   final Color? color;
   final List<Color>? colors;
@@ -45,6 +48,7 @@ class GeneralGradientButton extends StatelessWidget {
   const GeneralGradientButton({
     Key? key,
     required this.child,
+    this.textStyle,
     this.onTap,
     this.color,
     this.colors,
@@ -66,7 +70,7 @@ class GeneralGradientButton extends StatelessWidget {
   GeneralGradientButton.text(
     String text, {
     Key? key,
-    TextStyle? style,
+    this.textStyle,
     this.onTap,
     this.color,
     this.colors,
@@ -88,7 +92,6 @@ class GeneralGradientButton extends StatelessWidget {
             text,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: style,
           ),
         ),
         super(key: key);
@@ -146,7 +149,8 @@ class GeneralGradientButton extends StatelessWidget {
           style: const TextStyle(
             color: Colors.white,
             fontSize: 16,
-          ),
+            fontWeight: FontWeight.w600,
+          ).merge(textStyle),
           child: child,
         ),
       ),

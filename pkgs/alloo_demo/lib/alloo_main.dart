@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:tory_base/tory_base.dart';
 
-import 'dialogs/dialog_test_page.dart';
+import 'dialog_test_page.dart';
 
 class AllooMainPage extends StatefulWidget {
   const AllooMainPage({Key? key}) : super(key: key);

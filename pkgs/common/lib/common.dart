@@ -7,12 +7,14 @@ export 'src/extensions/iterable_extension.dart';
 export 'src/extensions/list_extension.dart';
 export 'src/extensions/map_extension.dart';
 export 'src/extensions/dynamic_type_extension.dart';
+export 'src/extensions/dynamic_extension.dart';
 
 export 'src/utils/type_util.dart';
 export 'src/utils/text_util.dart';
 export 'src/utils/tuples.dart';
 export 'src/utils/debounce.dart';
 export 'src/utils/throttle.dart';
+export 'src/utils/dynamic_util.dart';
 
 export 'src/widgets/scale_size_widget.dart';
 export 'src/widgets/m_tabs.dart';

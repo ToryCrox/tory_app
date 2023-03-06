@@ -11,15 +11,19 @@ dependencies:
   flutter:
     sdk: flutter
 
+  common:
+    path: ../common
+  tory_base:
+    path: ../tory_base
+  flutter_svg: ^1.0.3
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
 
-  common:
-    path: ../common
-  tory_base:
-    path: ../tory_base
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

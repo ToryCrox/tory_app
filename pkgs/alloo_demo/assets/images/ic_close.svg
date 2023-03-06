@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 18</title>
+    <g id="弹窗同步" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="系统弹窗-规范" transform="translate(-1169.000000, -326.000000)">
+            <g id="模块001" transform="translate(82.000000, 184.000000)">
+                <g id="弹窗4" transform="translate(806.000000, 136.000000)">
+                    <g id="编组-19" transform="translate(276.029437, 1.029437)">
+                        <g id="编组-18" transform="translate(16.970563, 16.970563) rotate(-45.000000) translate(-16.970563, -16.970563) translate(4.970563, 4.970563)">
+                            <rect id="矩形" stroke="#979797" fill="#D8D8D8" opacity="0" x="0.5" y="0.5" width="23" height="23"></rect>
+                            <rect id="矩形" fill="#949494" x="11.2" y="3.64924854" width="1.4" height="16.7015029" rx="0.7"></rect>
+                            <rect id="矩形备份" fill="#949494" transform="translate(11.900000, 12.000000) rotate(-270.000000) translate(-11.900000, -12.000000) " x="11.2" y="3.64924854" width="1.4" height="16.7015029" rx="0.7"></rect>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
