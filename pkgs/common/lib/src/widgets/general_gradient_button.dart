@@ -45,9 +45,10 @@ class GeneralGradientButton extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final bool enable;
 
-  const GeneralGradientButton({
+  GeneralGradientButton({
     Key? key,
-    required this.child,
+    Widget? child,
+    String? text,
     this.textStyle,
     this.onTap,
     this.color,
@@ -65,36 +66,13 @@ class GeneralGradientButton extends StatelessWidget {
     this.padding,
     this.margin,
     this.enable = true,
-  }) : super(key: key);
-
-  GeneralGradientButton.text(
-    String text, {
-    Key? key,
-    this.textStyle,
-    this.onTap,
-    this.color,
-    this.colors,
-    this.begin,
-    this.end,
-    this.disabledColor,
-    this.width,
-    this.height,
-    this.constraints,
-    this.borderRadius,
-    this.border,
-    this.shape,
-    this.decoration,
-    this.padding,
-    this.margin,
-    this.enable = true,
-  })  : child = Center(
-          child: Text(
-            text,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        super(key: key);
+  }) : child = child ?? Center(
+    child: Text(
+      text ?? '',
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    ),
+  ), super(key: key);
 
   @override
   Widget build(BuildContext context) {

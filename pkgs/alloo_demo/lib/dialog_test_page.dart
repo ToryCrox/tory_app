@@ -34,6 +34,7 @@ class _AllooTestDialogPageState extends State<AllooTestDialogPage> {
               AllooAlertDialog.show(
                 context: context,
                 contentText: '你已被主播设为管理员，管理员可以将任何不',
+                /// 默认自带确认按钮，不带取消，需要取消按钮，需要设置negativeButton或者positiveText
                 negativeButton: const AllooNegativeButton(),
               );
             },
@@ -66,13 +67,20 @@ class _AllooTestDialogPageState extends State<AllooTestDialogPage> {
               AllooAlertDialog.show(
                 context: context,
                 title: '你未上传头像',
-                content: const Text('完成真人认证需要先上传头像\n上传头像可获得金币奖励哟~'),
+                /// 也可以用content = Text.rich()来自定义内容
+                contentRich: [
+                  const TextSpan(text: '继续完善资料，可获得 '),
+                  const TextSpan(
+                    text: 'RP15',
+                    style: TextStyle(color: Color(0xFFFF8E2A)),
+                  ),
+                ],
                 negativeButton: const AllooNegativeButton(),
-                positiveButton: AllooPositiveButton(
+                positiveButton: const AllooPositiveButton(
                   child: Text.rich(
                     TextSpan(
                       children: [
-                        const TextSpan(text: '立即上传'),
+                        TextSpan(text: '立即上传'),
                         WidgetSpan(child: SizedBox(width: 2)),
                         TextSpan(
                             text: '+15',
@@ -112,8 +120,36 @@ class _AllooTestDialogPageState extends State<AllooTestDialogPage> {
               dog.d('结果为 是否确认: ${result}, 勾选结果为: ${checkController.value}');
             },
           ),
+          ListTile(
+            title: const Text('倒计时自动关闭'),
+            onTap: () {
+              showWithCountDown(context);
+            },
+          ),
         ],
       ),
+    );
+  }
+
+
+  /// 按钮倒计时自动关闭示例
+  Future showWithCountDown(BuildContext context) async {
+    /// controller用于手动关闭弹窗
+    final controller = AllooAlertDialogController();
+    await AllooAlertDialog.show(
+      context: context,
+      title: '温馨提示',
+      contentText: '在接听过程中对方有低俗、涉政、辱骂等让您感到不适的行为，请及时挂断向客服举报，我们会立刻帮助处理。',
+      positiveButton: AllooPositiveButton(
+        child: CountDownWidget(
+          countDownTime: 9000,
+          builder: (context, timeLeft) => Text('确认' + '(${timeLeft ~/ 1000}s)'),
+          onCountDownFinish: () {
+            controller.close();
+          },
+        ),
+      ),
+      controller: controller,
     );
   }
 }

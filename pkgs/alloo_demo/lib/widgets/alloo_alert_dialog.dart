@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:alloo_demo/widgets/alloo_gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,6 +18,7 @@ class AllooAlertDialog extends StatelessWidget {
   final String? title;
   final Widget content;
   final bool showClose;
+  final bool showDefaultBackground;
   final AllooPositiveButton positiveButton;
   final AllooNegativeButton? negativeButton;
 
@@ -26,21 +29,27 @@ class AllooAlertDialog extends StatelessWidget {
     this.positiveButton = const AllooPositiveButton(),
     this.negativeButton,
     this.showClose = false,
+    this.showDefaultBackground = true,
   }) : super(key: key);
 
   /// 显示Alloo自定义的确认弹框
   /// - [context] BuildContext
   /// - [title] 标题，可以为空
-  /// - [content] 内容Widget, 可使用富文本，建议不要使用RichText，因为RichText不会继承父级的TextStyle
+  /// - [content], [contentText], [contentRich] 都是内容设置，只能有一个且不为空， 内容有默认的文字颜色和字号，并且在有标题和无标题时不一样
+  /// - [content] 内容Widget, 可使用富文本，建议不要使用RichText，
+  /// 因为RichText不会继承父级的TextStyle
   /// 可以使用Text.rich()来实现
   /// - [contentText] 内容文本，当[content]为空时，使用[contentText]作为内容
   /// - [contentRich] 内容富文本，当[content]为空时，使用[contentRich]作为内容
-  /// - [content]和[contentText]不能同时为空
-  /// - [positiveButton] 确认按钮, 默认为[AllooPositiveButton], 不会为空
-  /// - [negativeButton] 取消按钮，可以为空
+  /// - [content]和[contentText][contentRich]不能同时为空
+  /// - [positiveButton] 确认按钮, 默认为[AllooPositiveButton], 不会为空， 默认文字为'确认'
+  /// - [positiveText] 确认按钮的文字，当[positiveButton]为空时，使用[positiveText]作为确认按钮的文字
+  /// - [negativeButton] 取消按钮，可以为空, 默认是不展示的，如果需要展示可以直接使用AllooNegativeButton(), 默认文字为'取消'
+  /// - [negativeText] 取消按钮的文字，当[negativeButton]为空时，使用[negativeText]作为取消按钮的文字
+  /// - [showDefaultBackground] 是否显示默认的背景，默认为true
   /// - [showClose] 是否显示右上角关闭按钮，默认为false
   /// - [dismissible] 点击空白区域是否可以关闭弹框，默认为true
-  /// - return Future<bool?>, 点击确认按钮返回true，点击取消按钮返回false，点击空白区域返回null
+  /// - 返回值为bool?类型，注意可以为null, 点击确认按钮返回true，点击取消按钮返回false，点击空白区域返回null
   static Future<bool?> show({
     required BuildContext context,
     String? title,
@@ -51,10 +60,12 @@ class AllooAlertDialog extends StatelessWidget {
     String? positiveText,
     AllooNegativeButton? negativeButton,
     String? negativeText,
+    bool showDefaultBackground = true,
     bool showClose = false,
     bool dismissible = true,
-  }) {
-    assert(content != null || contentText != null,
+    AllooAlertDialogController? controller,
+  }) async {
+    assert(content != null || contentText != null || contentRich != null,
     'content and contentText cannot be null at the same time');
 
     final Widget contentWidget;
@@ -64,19 +75,19 @@ class AllooAlertDialog extends StatelessWidget {
       contentWidget = Text.rich(
         TextSpan(children: contentRich),
         textAlign: TextAlign.center,
-        );
+      );
     } else {
       contentWidget = Text(
         contentText ?? '',
         textAlign: TextAlign.center,
       );
     }
-
-    return showGeneralDialog<bool>(
+    final result = await showGeneralDialog<bool>(
       context: context,
       barrierDismissible: dismissible,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       pageBuilder: (context, animation, secondaryAnimation) {
+        controller?._dialogContext = context;
         return AllooAlertDialog(
           title: title,
           content: contentWidget,
@@ -89,9 +100,12 @@ class AllooAlertDialog extends StatelessWidget {
                   ? AllooNegativeButton(text: negativeText)
                   : null),
           showClose: showClose,
+          showDefaultBackground: showDefaultBackground,
         );
       },
     );
+    controller?._dialogContext = null;
+    return result;
   }
 
   @override
@@ -105,16 +119,17 @@ class AllooAlertDialog extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            PositionedDirectional(
-              top: 0,
-              start: 0,
-              end: 0,
-              child: Image.asset(
-                'assets/images/alloo_alert_dialog_background.webp',
-                package: 'alloo_demo',
-                fit: BoxFit.fitWidth,
+            if (showDefaultBackground)
+              PositionedDirectional(
+                top: 0,
+                start: 0,
+                end: 0,
+                child: Image.asset(
+                  'assets/images/alloo_alert_dialog_background.webp',
+                  package: 'alloo_demo',
+                  fit: BoxFit.fitWidth,
+                ),
               ),
-            ),
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(20, 30, 20, 10),
               child: _buildBody(),
@@ -189,7 +204,7 @@ class AllooAlertDialog extends StatelessWidget {
 class AllooPositiveButton extends StatelessWidget {
   final String? text;
   final Widget? child;
-  final VoidCallback? onTap;
+  final FutureOr<bool> Function()? onTap;
 
   const AllooPositiveButton({
     Key? key,
@@ -202,11 +217,14 @@ class AllooPositiveButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget child = Center(child: this.child ?? Text(text ?? '确认'));
     return AllooGradientButton(
-        onTap: onTap ??
-            () {
-              Navigator.of(context).pop(true);
-            },
-        child: child);
+      onTap: () async {
+        final popContext= context;
+        if ((await onTap?.call()) ?? true) {
+          Navigator.of(popContext).pop(true);
+        }
+      },
+      child: child,
+    );
   }
 }
 
@@ -216,7 +234,7 @@ class AllooPositiveButton extends StatelessWidget {
 class AllooNegativeButton extends StatelessWidget {
   final String? text;
   final Widget? child;
-  final VoidCallback? onTap;
+  final FutureOr<bool> Function()? onTap;
 
   const AllooNegativeButton({
     Key? key,
@@ -230,12 +248,31 @@ class AllooNegativeButton extends StatelessWidget {
     final Widget child = Center(child: this.child ?? Text(text ?? '取消'));
     return AllooGradientButton(
         color: Colors.white,
-        textStyle: const TextStyle(color: Colors.black),
+        textStyle: const TextStyle(color: Color(0xFF313131)),
         margin: EdgeInsets.zero,
-        onTap: onTap ??
-            () {
-              Navigator.of(context).pop(false);
-            },
-        child: child);
+        onTap: () async {
+          final popContext = context;
+          if ((await onTap?.call()) ?? true) {
+            Navigator.of(popContext).pop(false);
+          }
+        },
+        child: child,
+    );
+  }
+}
+
+
+/// AllooAlertDialog关闭的控制类，可以通过此类关闭弹框
+class AllooAlertDialogController {
+  BuildContext? _dialogContext;
+
+  AllooAlertDialogController();
+
+  /// 关闭弹框
+  void close() {
+    final context = _dialogContext;
+    if (context != null) {
+      Navigator.of(context).pop();
+    }
   }
 }

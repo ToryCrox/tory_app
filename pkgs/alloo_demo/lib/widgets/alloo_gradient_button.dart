@@ -12,9 +12,10 @@ import 'package:flutter/material.dart';
 
 class AllooGradientButton extends GeneralGradientButton {
 
-  const AllooGradientButton({
+  AllooGradientButton({
     Key? key,
-    required Widget child,
+    Widget? child,
+    String? text,
     required OnTapThrottle onTap,
     TextStyle? textStyle,
     List<Color>? colors,
@@ -27,32 +28,10 @@ class AllooGradientButton extends GeneralGradientButton {
           key: key,
           onTap: onTap,
           child: child,
+          text: text,
           textStyle: textStyle,
           colors: color != null ? null : colors ?? const [Color(0xFFB77DFF), Color(0xFF7658FF)],
           color: color,
-          borderRadius: borderRadius ?? 6.0,
-          padding: padding ??
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          height: height ?? 42,
-          margin: margin,
-        );
-
-  AllooGradientButton.text({
-    Key? key,
-    required String text,
-    required OnTapThrottle onTap,
-    List<Color>? colors,
-    TextStyle? textStyle,
-    double? borderRadius,
-    EdgeInsetsGeometry? padding,
-    double? height,
-    EdgeInsetsGeometry? margin,
-  }) : super(
-          key: key,
-          onTap: onTap,
-          child: Center(child: Text(text)),
-          textStyle: textStyle,
-          colors: colors ?? const [Color(0xFFB77DFF), Color(0xFF7658FF)],
           borderRadius: borderRadius ?? 6.0,
           padding: padding ??
               const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
