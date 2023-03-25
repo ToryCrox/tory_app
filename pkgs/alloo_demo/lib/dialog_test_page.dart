@@ -44,7 +44,7 @@ class _AllooTestDialogPageState extends State<AllooTestDialogPage> {
             onTap: () {
               AllooAlertDialog.show(
                 context: context,
-                title: '温馨提示',
+                titleText: '温馨提示',
                 contentText: '退出直播间将不再收听该直播',
                 showClose: true,
               );
@@ -55,7 +55,7 @@ class _AllooTestDialogPageState extends State<AllooTestDialogPage> {
             onTap: () {
               AllooAlertDialog.show(
                 context: context,
-                title: '温馨提示',
+                titleText: '温馨提示',
                 contentText: 'Alloo提倡真实交友，自我介绍需要完成真人认证才能填写哦~',
                 negativeButton: const AllooNegativeButton(),
               );
@@ -66,7 +66,7 @@ class _AllooTestDialogPageState extends State<AllooTestDialogPage> {
             onTap: () {
               AllooAlertDialog.show(
                 context: context,
-                title: '你未上传头像',
+                titleText: '你未上传头像',
                 /// 也可以用content = Text.rich()来自定义内容
                 contentRich: [
                   const TextSpan(text: '继续完善资料，可获得 '),
@@ -103,7 +103,7 @@ class _AllooTestDialogPageState extends State<AllooTestDialogPage> {
                   AllooCheckBoxController(false);
               final result = await AllooAlertDialog.show(
                 context: context,
-                title: '你想要将这位观众踢出直播间吗？',
+                titleText: '你想要将这位观众踢出直播间吗？',
                 //contentText: '加入本直播间黑名单，永久禁止进入',
                 content: GestureDetector(
                   child: AllooCheckBox(
@@ -138,12 +138,12 @@ class _AllooTestDialogPageState extends State<AllooTestDialogPage> {
     final controller = AllooAlertDialogController();
     await AllooAlertDialog.show(
       context: context,
-      title: '温馨提示',
+      titleText: '温馨提示',
       contentText: '在接听过程中对方有低俗、涉政、辱骂等让您感到不适的行为，请及时挂断向客服举报，我们会立刻帮助处理。',
       positiveButton: AllooPositiveButton(
         child: CountDownWidget(
           countDownTime: 9000,
-          builder: (context, timeLeft) => Text('确认' + '(${timeLeft ~/ 1000}s)'),
+          builder: (context, timeLeft) => Text('确认(${timeLeft ~/ 1000}s)'),
           onCountDownFinish: () {
             controller.close();
           },

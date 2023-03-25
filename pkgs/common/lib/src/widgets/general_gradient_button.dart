@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../common.dart';
+import './throttle_tap.dart';
 
 /// 背景渐变的按钮GeneralGradientButton
 /// - 内部的点击使用ThrottleInkWell实现
 /// - 内部空间默认居中
 /// - 默认字体颜色为Colors.white
 /// - 通过[child]设置子控件
+/// - 通过[text]设置文字, 默认为null
 /// - 通过[textStyle]设置字体样式, 默认为颜色为Colors.white，字体大小为16，字重为FontWeight.w600
 /// - 通过[width]设置宽度，可空，默认包裹子控件
 /// - 通过[height]设置高度，可空，默认包裹子控件
@@ -26,7 +27,8 @@ import '../../common.dart';
 /// - 通过[margin]设置外边距，可空，默认为EdgeInsets.zero
 
 class GeneralGradientButton extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
+  final String? text;
   final TextStyle? textStyle;
   final OnTapThrottle? onTap;
   final Color? color;
@@ -45,10 +47,10 @@ class GeneralGradientButton extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final bool enable;
 
-  GeneralGradientButton({
+  const GeneralGradientButton({
     Key? key,
-    Widget? child,
-    String? text,
+    this.child,
+    this.text,
     this.textStyle,
     this.onTap,
     this.color,
@@ -66,13 +68,8 @@ class GeneralGradientButton extends StatelessWidget {
     this.padding,
     this.margin,
     this.enable = true,
-  }) : child = child ?? Center(
-    child: Text(
-      text ?? '',
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-    ),
-  ), super(key: key);
+  })  : assert(child != null || text != null, 'child or text can not be null'),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +77,11 @@ class GeneralGradientButton extends StatelessWidget {
     final enable = (this.enable && onTap != null);
     final color = enable
         ? (this.colors?.isNotEmpty == true
-            ? null
-            : this.color ?? theme.primaryColor)
+        ? null
+        : this.color ?? theme.primaryColor)
         : disabledColor ?? theme.disabledColor;
     final colors =
-        enable ? (this.colors?.isNotEmpty == true ? this.colors : null) : null;
+    enable ? (this.colors?.isNotEmpty == true ? this.colors : null) : null;
 
     final borderRadius = BorderRadius.circular(this.borderRadius ?? 8);
     final Decoration decoration;
@@ -95,7 +92,7 @@ class GeneralGradientButton extends StatelessWidget {
         shape: shape!,
         color: color,
         gradient:
-            colors?.isNotEmpty == true ? LinearGradient(colors: colors!) : null,
+        colors?.isNotEmpty == true ? LinearGradient(colors: colors!) : null,
       );
     } else {
       decoration = BoxDecoration(
@@ -104,10 +101,10 @@ class GeneralGradientButton extends StatelessWidget {
         border: shape == null ? border : null,
         gradient: colors?.isNotEmpty == true
             ? LinearGradient(
-                colors: colors!,
-                begin: begin ?? AlignmentDirectional.centerStart,
-                end: end ?? AlignmentDirectional.centerEnd,
-              )
+          colors: colors!,
+          begin: begin ?? AlignmentDirectional.centerStart,
+          end: end ?? AlignmentDirectional.centerEnd,
+        )
             : null,
       );
     }
@@ -120,16 +117,23 @@ class GeneralGradientButton extends StatelessWidget {
       child: ThrottleInkWell(
         onTap: enable ? onTap : null,
         padding:
-            padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         shape: shape,
         borderRadius: borderRadius,
         child: DefaultTextStyle(
           style: const TextStyle(
             color: Colors.white,
             fontSize: 16,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ).merge(textStyle),
-          child: child,
+          child: child ??
+              Center(
+                child: Text(
+                  text ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
         ),
       ),
     );

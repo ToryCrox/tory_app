@@ -62,11 +62,16 @@ class _BubbleTipDemoState extends State<BubbleTipDemo> {
             //     );
             //   },
             // ),
-            child: ElevatedButton(
+            child: !_showBtn ? null :  ElevatedButton(
               key: btnKey,
-              onPressed: () {
+              onPressed: () async {
                 final context = btnKey.currentContext;
                 if (context == null) return;
+                Future.delayed(Duration(seconds: 2), () {
+                  setState(() {
+                    _showBtn = false;
+                  });
+                });
                 showBubbleTip(
                   context: context,
                   anchorContext: context,
@@ -85,4 +90,5 @@ class _BubbleTipDemoState extends State<BubbleTipDemo> {
   }
 
   final btnKey = GlobalKey();
+  bool _showBtn = true;
 }

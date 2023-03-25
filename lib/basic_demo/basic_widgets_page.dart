@@ -2,6 +2,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -40,8 +41,9 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
           Center(
             child: GeneralGradientButton(
               //width: 300,
-              constraints: BoxConstraints(minHeight: 48, minWidth: 200),
+              constraints: const BoxConstraints(minHeight: 48, minWidth: 200),
               child: Center(child: Text('GeneralGradientButton')),
+              //border: Border.all(color: Colors.blue, width: 1),
               //margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               onTap: () {
                 debugPrint('GeneralGradientButton');
@@ -50,6 +52,8 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
               borderRadius: 16,
               //padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               colors: [Colors.blue[700]!, Colors.blue[200]!],
+              disabledColor: const Color(0xFFE3E3E3),
+              enable: false,
             ),
           ),
           const SizedBox(height: 10),
@@ -151,14 +155,19 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
           ),
         ),
         Expanded(
-            child: CupertinoSwitch(
-          value: _isSwitchSelected,
-          onChanged: (value) {
-            setState(() {
-              _isSwitchSelected = !_isSwitchSelected;
-            });
-          },
-        )),
+            child: Center(
+              child: ScaleSizeWidget(
+                scale: 0.5,
+          child: CupertinoSwitch(
+              value: _isSwitchSelected,
+              onChanged: (value) {
+                setState(() {
+                  _isSwitchSelected = !_isSwitchSelected;
+                });
+              },
+          ),
+        ),
+            )),
         Expanded(
           child: Checkbox(
             value: _isCheckboxSelected,

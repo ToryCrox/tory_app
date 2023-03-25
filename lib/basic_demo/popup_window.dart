@@ -189,8 +189,13 @@ class _PopupWindowRoute<T> extends PopupRoute<T> with PopupWindowRoute {
       print('_autoAdjustPositionByAnchor update......');
     }
     if (!_isShow) return;
-    WidgetsBinding.instance.addPostFrameCallback((t) =>
-        _autoAdjustPositionByAnchor(anchorContext));
+    WidgetsBinding.instance.addPostFrameCallback((t) {
+      try {
+        _autoAdjustPositionByAnchor(anchorContext);
+      } catch(e) {
+        print('_autoAdjustPositionByAnchor error: e');
+      }
+    });
   }
 }
 
@@ -495,6 +500,7 @@ PopupWindowRoute<T>? showPopupWindow<T>({
 }
 
 RelativeRect? findAnchorPosition(BuildContext anchorContext) {
+  anchorContext.widget;
   final RenderBox? button = anchorContext.findRenderObject() as RenderBox?;
   final RenderBox? overlay = Navigator
       .of(anchorContext)
