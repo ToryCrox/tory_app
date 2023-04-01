@@ -36,7 +36,8 @@ void main() {
       /// 格式化时间: 2023/02/24 10:00:00
       return '${date.year}/${date.month}/${date.day} ${date.hour}:${date.minute}:${date.second}';
     });
-    matchTool.addMatch(RegExp(r'\{\{userName\}\}'), (index, match) => TypeUtil.parseString(params['userName']));
+    //matchTool.addMatch(RegExp(r'\{\{userName\}\}'), (index, match) => TypeUtil.parseString(params['userName']));
+    matchTool.addMatch(RegExp(r'\{\{[^{}]*\}\}'), (index, match) => 'xxxxxx');
     TypeUtil.parseMap(params['mappingTime']).forEach((key, value) {
       matchTool.addMatch(
         key, (index, match) {

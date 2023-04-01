@@ -20,8 +20,21 @@ class RegTextMatchTool<T> {
     final matches = pattern.allMatches(text);
     var index = 0;
     for (final match in matches) {
-      _matches.add(_MatchResult(index++, match, builder));
+      /// 如果匹配到的字符串与以前的匹配重叠，则忽略
+      print('${match.pattern}=>${match.start}=>${match.end}, ${match.group(0)}');
+      if (!_isOverlap(match)) {
+        _matches.add(_MatchResult(index++, match, builder));
+      }
     }
+  }
+
+  /// 是否重叠的匹配区域
+  bool _isOverlap(Match match) {
+    return _matches.any((e) {
+      final m = e.match;
+      return (m.start <= match.start && match.start < m.end) ||
+          (m.start < match.end && match.end <= m.end);
+    });
   }
 
   /// 构建
