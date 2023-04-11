@@ -28,6 +28,7 @@ import 'basic_demo/bubble_tip_demo.dart';
 import 'basic_demo/function_widgets_demo.dart';
 import 'basic_demo/sliver/sliver_navi_page.dart';
 import 'dev/shared_preferences_list.dart';
+import 'generated/l10n.dart';
 import 'third/location_demo_page.dart';
 
 void main() {
@@ -40,22 +41,22 @@ void main() {
   runZoned(() {
     if (kDebugMode) {
       PluginManager.instance // Register plugin kits
-        ..register(WidgetInfoInspector())
-        ..register(WidgetDetailInspector())
-        ..register(ColorSucker())
+        ..register(const WidgetInfoInspector())
+        ..register(const WidgetDetailInspector())
+        ..register(const ColorSucker())
         ..register(AlignRuler())
-        ..register(ColorPicker()) // New feature
-        ..register(TouchIndicator()) // New feature
+        ..register(const ColorPicker()) // New feature
+        ..register(const TouchIndicator()) // New feature
         ..register(Performance())
-        ..register(ShowCode())
-        ..register(MemoryInfoPage())
+        ..register(const ShowCode())
+        ..register(const MemoryInfoPage())
         ..register(CpuInfoPage())
-        ..register(DeviceInfoPanel())
+        ..register(const DeviceInfoPanel())
         ..register(Console()); // Pass in your Dio instance
       // After flutter_ume 0.3.0
-      runApp(UMEWidget(child: MyApp(), enable: true));
+      runApp(const UMEWidget(child: MyApp(), enable: true));
     } else {
-      runApp(MyApp());
+      runApp(const MyApp());
     }
   },
       zoneSpecification: ZoneSpecification(print: (self, parent, zone, line) {
@@ -85,6 +86,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      onGenerateTitle: (context) => S.of(context).app_name,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         platform: TargetPlatform.iOS,
@@ -92,8 +94,8 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         debugPrint("");
         return Directionality(
-            textDirection: TextDirection.ltr,
-            child: child ?? Container());
+            textDirection: TextDirection.ltr, child: child ?? Container(),
+        );
       },
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
       routes: {
@@ -102,12 +104,13 @@ class MyApp extends StatelessWidget {
             )
       },
       localizationsDelegates: const [
+        S.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       // Insert this line
-      supportedLocales: const [Locale("zh", "CN"), Locale("en", "US")],
+      supportedLocales: S.delegate.supportedLocales,
       scrollBehavior: const MaterialScrollBehavior().copyWith(
         dragDevices: {
           PointerDeviceKind.mouse,
@@ -145,7 +148,8 @@ class _MyHomePageState extends State<MyHomePage> with LifeStateOwnerMixin {
       ),
       body: ListTileTheme.merge(
         dense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: -10),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 14, vertical: -10),
         horizontalTitleGap: 0,
         child: _buildColumn(context),
       ),
@@ -213,7 +217,6 @@ class _MyHomePageState extends State<MyHomePage> with LifeStateOwnerMixin {
           title: "Alloo相关测试",
           builder: (context) => const AllooMainPage(),
         ),
-
       ],
     );
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tory_base/app/logger.dart';
 import 'package:tory_base/tory_base.dart';
 
 import '../animate/widget/alloo_tabs.dart';

@@ -15,6 +15,7 @@ export 'src/utils/tuples.dart';
 export 'src/utils/debounce.dart';
 export 'src/utils/throttle.dart';
 export 'src/utils/dynamic_util.dart';
+export 'src/utils/prefs_helper.dart';
 
 export 'src/widgets/scale_size_widget.dart';
 export 'src/widgets/m_tabs.dart';
