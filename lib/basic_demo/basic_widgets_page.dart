@@ -2,10 +2,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 
 class BasicWidgetsPage extends StatefulWidget {
   const BasicWidgetsPage({Key? key}) : super(key: key);
@@ -24,7 +24,7 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
       body: ListView(
         children: [
           createSwitchAnCheckBoxWidget(),
-          ...createTextField(),
+          //...createTextField(),
           const SizedBox(
             height: 10,
           ),
@@ -140,10 +140,21 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
       children: [
         Expanded(
           child: Center(
-            child: SizedBox(
-              width: 20,
-              height: 20,
-              child: Switch.adaptive(
+            child: Switch.adaptive(
+              value: _isSwitchSelected,
+              onChanged: (value) {
+                setState(() {
+                  _isSwitchSelected = !_isSwitchSelected;
+                });
+              },
+            ),
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: ScaleSizeWidget(
+              scale: 0.5,
+              child: CupertinoSwitch(
                 value: _isSwitchSelected,
                 onChanged: (value) {
                   setState(() {
@@ -155,19 +166,24 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
           ),
         ),
         Expanded(
-            child: Center(
-              child: ScaleSizeWidget(
-                scale: 0.5,
-          child: CupertinoSwitch(
+          child: Center(
+            child: CupertinoSwitchPlus(
               value: _isSwitchSelected,
+              switchWidth: 44,
+              switchHeight: 24,
+              switchPadding: const EdgeInsets.all(0),
+              trackPadding: const EdgeInsets.all(2),
+              activeGradient: const LinearGradient(
+                colors: [Colors.blue, Colors.green, Colors.redAccent],
+              ),
               onChanged: (value) {
                 setState(() {
                   _isSwitchSelected = !_isSwitchSelected;
                 });
               },
+            ),
           ),
         ),
-            )),
         Expanded(
           child: Checkbox(
             value: _isCheckboxSelected,

@@ -1,8 +1,19 @@
 import 'dart:async';
 
-import 'package:alloo_demo/widgets/alloo_gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'alloo_gradient_button.dart';
+
+/// Alloo业务自己的dialog弹框，主要用来确认和取消
+/// - 可以设置标题，内容，取消按钮，确认按钮
+/// - [title] 标题，可以为空
+/// - [content] 内容Widget，不允许为空，内容的字体颜色和大小在有标题和无标题时不一样，
+/// 有标题时为[Color(0xFF949494)]，字号14, 无标题时为[Color(0xFF313131)]， 字号16
+/// - [positiveButton] 确认按钮，不能为空, 默认为[AllooPositiveButton]
+/// - [negativeButton] 取消按钮，可以为空
+/// - [positiveButton] 和 [negativeButton] 上下排列
+/// - [showClose] 是否显示右上角关闭按钮，默认为false
 
 class AllooAlertDialog extends StatelessWidget {
   final Widget? title;
@@ -41,7 +52,7 @@ class AllooAlertDialog extends StatelessWidget {
   /// - [showClose] 是否显示右上角关闭按钮，默认为false
   /// - [dismissible] 点击空白区域是否可以关闭弹框，默认为true
   /// - 返回值为bool?类型，注意可以为null, 点击确认按钮返回true，点击取消按钮返回false，点击空白区域返回null
-   static Future<bool?> show({
+  static Future<bool?> show({
     required BuildContext context,
     Widget? title,
     String? titleText,
@@ -57,12 +68,12 @@ class AllooAlertDialog extends StatelessWidget {
     bool dismissible = true,
     AllooAlertDialogController? controller,
   }) async {
-     assert(content != null || contentText != null || contentRich != null,
-     'content and contentText cannot be null at the same time');
-     assert(title == null || titleText == null, 'title and titleText cannot be null at the same time');
+    assert(content != null || contentText != null || contentRich != null,
+        'content and contentText cannot be null at the same time');
+    assert(title == null || titleText == null,
+        'title and titleText cannot be null at the same time');
 
-
-     final Widget contentWidget;
+    final Widget contentWidget;
     if (content != null) {
       contentWidget = content;
     } else if (contentRich != null) {
@@ -85,15 +96,19 @@ class AllooAlertDialog extends StatelessWidget {
         return AllooAlertDialog(
           title: titleText != null
               ? Text(
-            titleText,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          )
+                  titleText,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
               : title,
           content: contentWidget,
-          positiveButton: (positiveText != null) ? AllooPositiveButton(text: positiveText) : positiveButton,
-          negativeButton: (negativeText != null) ? AllooNegativeButton(text: negativeText) : negativeButton,
+          positiveButton: (positiveText != null)
+              ? AllooPositiveButton(text: positiveText)
+              : positiveButton,
+          negativeButton: (negativeText != null)
+              ? AllooNegativeButton(text: negativeText)
+              : negativeButton,
           showClose: showClose,
           showDefaultBackground: showDefaultBackground,
         );
@@ -173,9 +188,8 @@ class AllooAlertDialog extends StatelessWidget {
         /// 内容的字体颜色和大小在有标题和无标题时不一样，
         DefaultTextStyle(
           style: TextStyle(
-            color: !hasTitle
-                ? const Color(0xFF313131)
-                : const Color(0xFF949494),
+            color:
+                !hasTitle ? const Color(0xFF313131) : const Color(0xFF949494),
             fontSize: !hasTitle ? 16 : 14,
           ),
           child: content,
@@ -191,7 +205,7 @@ class AllooAlertDialog extends StatelessWidget {
   }
 }
 
-/// PositiveButton内部由AllooGradientButton实现
+/// PositiveButton内部由AllooGradientButton实现, 字体大小16
 /// [text] 按钮文字, 默认为'确认'
 /// [child] 自定义的按钮内容，可以为空，为空时使用[text]作为按钮内容
 /// [onTap] 点击事件, 可以为空，为空时按钮时点击退出弹框，若不为空，返回值为true时退出弹框，返回值为false时不退出弹框
@@ -199,7 +213,7 @@ class AllooAlertDialog extends StatelessWidget {
 class AllooPositiveButton extends StatelessWidget {
   final String? text;
   final Widget? child;
-  final FutureOr<bool> Function()? onTap;
+  final FutureOr<void> Function()? onTap;
 
   const AllooPositiveButton({
     Key? key,
@@ -211,19 +225,21 @@ class AllooPositiveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget child =
-    Center(child: this.child ?? Text(text ?? '确认'));
-    return AllooGradientButton(
+        Center(child: this.child ?? Text(text ?? '确定'));
+    return AllooButton(
       onTap: () async {
-        final popContext= context;
-        if ((await onTap?.call()) ?? true) {
-          Navigator.of(popContext).pop(true);
+        if (onTap == null) {
+          Navigator.of(context).pop(true);
+          return;
         }
+        await onTap?.call();
       },
+      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      height: 42,
       child: child,
     );
   }
 }
-
 
 /// AllooNegativeButton内部由AllooGradientButton实现
 /// [text] 按钮文字, 默认为'取消'
@@ -242,22 +258,24 @@ class AllooNegativeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget child = Center(child: this.child ?? Text(text ?? '取消'));
-    return AllooGradientButton(
-        color: Colors.white,
-        textStyle: const TextStyle(color: Color(0xFF313131)),
-        margin: EdgeInsets.zero,
-        onTap: () async {
-          final popContext = context;
-          if ((await onTap?.call()) ?? true) {
-            Navigator.of(popContext).pop(false);
-          }
-        },
-        child: child,
+    final Widget child =
+        Center(child: this.child ?? Text(text ?? '取消'));
+    return AllooButton(
+      color: Colors.white,
+      textStyle: const TextStyle(color: Color(0xFF313131), fontSize: 16, fontWeight: FontWeight.w500),
+      height: 42,
+      margin: EdgeInsets.zero,
+      onTap: () async {
+        if (onTap == null) {
+          Navigator.of(context).pop(false);
+          return;
+        }
+        await onTap?.call();
+      },
+      child: child,
     );
   }
 }
-
 
 /// AllooAlertDialog关闭的控制类，可以通过此类关闭弹框
 class AllooAlertDialogController {

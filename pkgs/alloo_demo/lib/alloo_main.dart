@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:tory_base/tory_base.dart';
 
+import 'alloo_picker_test_page.dart';
 import 'dialog_test_page.dart';
 
 class AllooMainPage extends StatefulWidget {
@@ -22,6 +23,10 @@ class _AllooMainPageState extends State<AllooMainPage> {
           RoutePageItem(
             title: "Dialog相关测试",
             builder: (context) => const AllooTestDialogPage(),
+          ),
+          RoutePageItem(
+            title: "Picker相关测试",
+            builder: (context) => const AllooPickerTestPage(),
           ),
         ],
       ),

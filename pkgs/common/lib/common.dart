@@ -26,3 +26,4 @@ export 'src/widgets/popup_window.dart';
 export 'src/widgets/bubble_tip.dart';
 export 'src/widgets/general_gradient_button.dart';
 export 'src/widgets/count_down_widget.dart';
+export 'src/widgets/cupertino_switch_plus.dart';

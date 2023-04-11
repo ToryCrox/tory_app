@@ -21,7 +21,6 @@ class RegTextMatchTool<T> {
     var index = 0;
     for (final match in matches) {
       /// 如果匹配到的字符串与以前的匹配重叠，则忽略
-      print('${match.pattern}=>${match.start}=>${match.end}, ${match.group(0)}');
       if (!_isOverlap(match)) {
         _matches.add(_MatchResult(index++, match, builder));
       }

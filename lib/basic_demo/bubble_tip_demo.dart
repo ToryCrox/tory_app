@@ -1,7 +1,7 @@
+import 'package:alloo_demo/alloo_demo.dart';
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
-import 'package:tory_app/basic_demo/popup_window.dart';
 
-import 'bubble_tip.dart';
 
 class BubbleTipDemo extends StatefulWidget {
   const BubbleTipDemo({Key? key}) : super(key: key);
@@ -22,68 +22,68 @@ class _BubbleTipDemoState extends State<BubbleTipDemo> {
   }
 
   Widget _buildBody() {
-    final direction = PopupDirection.top;
-    final align = PopupAlign.end;
-    final margin =
-        const EdgeInsetsDirectional.only(start: 0, end: 10, top: 0, bottom: 0);
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 0),
-      child: Stack(
+    const direction = PopupDirection.top;
+    const align = PopupAlign.end;
+    const margin =
+        EdgeInsetsDirectional.only(start: 0, end: 10, top: 0, bottom: 0);
+    return SizedBox.expand(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Center(
-            // child: PopupWindowButton(
-            //   direction: direction,
-            //   align: align,
-            //   margin: margin,
-            //   buttonBuilder: (BuildContext context) {
-            //     return const Text('Test Popup');
-            //   },
-            //   windowBuilder: (BuildContext context, Animation<double> animation,
-            //       Animation<double> secondaryAnimation) {
-            //     return FadeTransition(
-            //       opacity: animation,
-            //       child: BubbleTipWrapperWidget(
-            //         direction: direction,
-            //         align: align,
-            //         indicator: Image.asset(
-            //           'assets/images/bubble_bottom_indicator_black.png',
-            //           width: 25,
-            //           height: 13,
-            //           color: Colors.greenAccent,
-            //         ),
-            //         //const Icon(Icons.arrow_downward),
-            //         indicatorPadding: 6,
-            //         child: Container(
-            //           color: Colors.greenAccent,
-            //           padding: EdgeInsets.all(10),
-            //           child: Text('TTTTTTTTTTTTTTDDDDDDDDDDDDDEEEEEEEEEEEE'),
-            //         ),
-            //       ),
-            //     );
-            //   },
-            // ),
-            child: !_showBtn ? null :  ElevatedButton(
+            PopupWindowButton(
+              direction: direction,
+              align: align,
+              margin: margin,
+              buttonBuilder: (BuildContext context) {
+                return const Text('Test Popup');
+              },
+              windowBuilder: (BuildContext context, Animation<double> animation,
+                  Animation<double> secondaryAnimation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: BubbleTipWrapperWidget(
+                    direction: direction,
+                    align: align,
+                    indicator: Image.asset(
+                      'assets/images/bubble_bottom_indicator_black.png',
+                      width: 25,
+                      height: 13,
+                      color: Colors.greenAccent,
+                    ),
+                    //const Icon(Icons.arrow_downward),
+                    indicatorPadding: 6,
+                    child: Container(
+                      color: Colors.greenAccent,
+                      padding: const EdgeInsets.all(10),
+                      child: const Text('Here you can set whether to enter the room automatically on the table~'),
+                    ),
+                  ),
+                );
+              },
+            ),
+            !_showBtn ? const SizedBox() :  ElevatedButton(
               key: btnKey,
               onPressed: () async {
                 final context = btnKey.currentContext;
                 if (context == null) return;
-                Future.delayed(Duration(seconds: 2), () {
+                Future.delayed(const Duration(seconds: 2), () {
                   setState(() {
-                    _showBtn = false;
+                    //_showBtn = false;
                   });
                 });
-                showBubbleTip(
+                showAllooBubbleTip(
                   context: context,
                   anchorContext: context,
                   followAnchor: true,
+                  dismissible: false,
                   content: const Text(
                       'Here you can set whether to enter the room automatically on the table~'),
                   //autoDismissDuration: const Duration(seconds: 5),
                 );
               },
-              child: Text('Test'),
+              child: const Text('Test'),
             ),
-          )
         ],
       ),
     );
