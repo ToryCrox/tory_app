@@ -138,3 +138,24 @@ extension ChangeNotifierLifeState on ChangeNotifier {
   }
 
 }
+
+extension LifeStateOwnerExtension on LifeStateOwner {
+  
+  /// 当初始化时回调
+  void whenInitialized(VoidCallback listener) {
+    addObserver((owner, state) {
+      if (state == LifeState.initialized) {
+        listener();
+      }
+    });
+  }
+  
+  /// 当dispose时回调
+  void whenDisposed(VoidCallback listener) {
+    addObserver((owner, state) {
+      if (state == LifeState.disposed) {
+        listener();
+      }
+    });
+  }
+}

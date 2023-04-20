@@ -52,8 +52,8 @@ class TypeUtil {
   /// 如果value是bool，则true转换成'1'， false为'0'
   /// 如果value是Map或List, Set，则转换成json字符串
   static String parseString(dynamic value, [String defaultValue = '']) {
-    if (value == null) return '';
-    if (value == 'null') return '';
+    if (value == null) return defaultValue;
+    if (value == 'null') return defaultValue;
     if (value is Map || value is List) return jsonEncode(value);
     if (value is Set) return jsonEncode(value.toList());
     return '$value';

@@ -18,8 +18,8 @@ class PrefsHelper {
     return _prefs.containsKey(key);
   }
 
-  static delete(String key) {
-    _prefs.remove(key);
+  static Future<bool> delete(String key) {
+    return _prefs.remove(key);
   }
 
   static Future<bool> init() async {
