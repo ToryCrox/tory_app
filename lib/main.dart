@@ -87,9 +87,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       onGenerateTitle: (context) => S.of(context).app_name,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         platform: TargetPlatform.iOS,
+        useMaterial3: true,
       ),
       builder: (context, child) {
         debugPrint("");
@@ -147,10 +149,6 @@ class _MyHomePageState extends State<MyHomePage> with LifeStateOwnerMixin {
         title: Text(widget.title),
       ),
       body: ListTileTheme.merge(
-        dense: true,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: -10),
-        horizontalTitleGap: 0,
         child: _buildColumn(context),
       ),
       floatingActionButton: FloatingActionButton(
@@ -162,11 +160,12 @@ class _MyHomePageState extends State<MyHomePage> with LifeStateOwnerMixin {
   }
 
   Widget _buildColumn(BuildContext context) {
-    return Column(
+    return ListView(
       children: <Widget>[
         RoutePageItem(
           title: "路由测试",
           icon: Icons.navigation,
+          subTitle: '路由测试,路由测试,路由测试,路由测试,路由测试',
           onPress: () async {
             final result = await Navigator.of(context)
                 .pushNamed("/new_page", arguments: "hi from Route Named");

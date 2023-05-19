@@ -42,7 +42,7 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
             child: GeneralGradientButton(
               //width: 300,
               constraints: const BoxConstraints(minHeight: 48, minWidth: 200),
-              child: Center(child: Text('GeneralGradientButton')),
+              child: const Center(child: Text('GeneralGradientButton')),
               //border: Border.all(color: Colors.blue, width: 1),
               //margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               onTap: () {
@@ -57,6 +57,13 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
             ),
           ),
           const SizedBox(height: 10),
+          Center(
+            child: HeartShape(
+              width: 40,
+              height: 40,
+              color: Colors.red,
+            ),
+          ),
         ],
       ),
     );
@@ -240,4 +247,53 @@ class _BasicWidgetsPageState extends State<BasicWidgetsPage> {
       ),
     );
   }
+}
+
+
+class HeartShape extends StatelessWidget {
+  final double width;
+  final double height;
+  final Color color;
+
+  const HeartShape(
+      {Key? key,
+        this.width = 40,
+        this.height = 40,
+        this.color = const Color(0xFFFF9BC6)})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: CustomPaint(
+        painter: _HeartShapePainter(),
+      ),
+    );
+  }
+}
+
+class _HeartShapePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final width = size.width;
+    final height = size.height;
+    final path = Path();
+
+    path.moveTo(width / 2, height * 0.9);
+    path.cubicTo(
+        width * 0.75, height * 0.7, width * 0.9, height * 0.4, width / 2, height * 0.2);
+    path.cubicTo(
+        width * 0.1, height * 0.4, width * 0.25, height * 0.7, width / 2, height * 0.9);
+
+    final paint = Paint()
+      ..color = Colors.red
+      ..style = PaintingStyle.fill;
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

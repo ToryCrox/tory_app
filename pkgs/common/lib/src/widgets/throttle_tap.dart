@@ -39,6 +39,10 @@ class ThrottleInkWell extends StatefulWidget {
   /// padding
   final EdgeInsetsGeometry? padding;
 
+  final MouseCursor? mouseCursor;
+
+  final Color? hoverColor;
+
   const ThrottleInkWell({
     Key? key,
     this.child,
@@ -53,6 +57,8 @@ class ThrottleInkWell extends StatefulWidget {
     this.height,
     this.padding,
     this.enableFeedback = true,
+    this.mouseCursor,
+    this.hoverColor,
   }) : super(key: key);
 
   @override
@@ -96,6 +102,8 @@ class _ThrottleInkWellState extends State<ThrottleInkWell> {
         customBorder: widget.shape,
         borderRadius: widget.borderRadius,
         enableFeedback: widget.enableFeedback,
+        mouseCursor: widget.mouseCursor,
+        hoverColor: widget.hoverColor,
         child: child,
       ),
     );
