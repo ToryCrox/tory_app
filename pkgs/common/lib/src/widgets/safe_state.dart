@@ -1,6 +1,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 /// 防止dispose后调用导致报错
 mixin SafeStateMixin<T extends StatefulWidget> on State<T> {
@@ -53,7 +54,15 @@ mixin SafeChangeNotifierMixin on ChangeNotifier {
   @override
   void notifyListeners() {
     if (!_isDisposed) {
-      super.notifyListeners();
+      final schedulerPhase = SchedulerBinding.instance.schedulerPhase;
+      // build/layout/paint are performed in persistentCallbacks.
+      if (schedulerPhase == SchedulerPhase.persistentCallbacks) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          super.notifyListeners();
+        });
+      } else {
+        super.notifyListeners();
+      }
     } else {
       debugPrint('SafeChangeNotifierMixin notifyListeners after disposed');
     }
