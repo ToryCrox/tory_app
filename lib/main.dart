@@ -12,16 +12,9 @@ import 'package:tory_app/layout/basic_layout_page.dart';
 import 'package:tory_app/basic_demo/basic_widgets_page.dart';
 import 'package:tory_app/basic_demo/image_icon_route.dart';
 import 'package:tory_app/basic_demo/new_route_demo.dart';
+import 'package:tory_app/third/common_web_view_page.dart';
 import 'package:tory_app/third/third_packege_demo.dart';
 import 'package:tory_base/tory_base.dart';
-
-import 'package:flutter_ume/flutter_ume.dart'; // UME framework
-import 'package:flutter_ume_kit_ui/flutter_ume_kit_ui.dart'; // UI kits
-import 'package:flutter_ume_kit_perf/flutter_ume_kit_perf.dart'; // Performance kits
-import 'package:flutter_ume_kit_show_code/flutter_ume_kit_show_code.dart'; // Show Code
-import 'package:flutter_ume_kit_device/flutter_ume_kit_device.dart'; // Device info
-import 'package:flutter_ume_kit_console/flutter_ume_kit_console.dart'; // Show debugPrint
-import 'package:flutter_ume_kit_dio/flutter_ume_kit_dio.dart'; // Dio Inspector
 
 import 'animate/animate_main.dart';
 import 'basic_demo/bubble_tip_demo.dart';
@@ -39,25 +32,7 @@ void main() {
   });
 
   runZoned(() {
-    if (kDebugMode) {
-      PluginManager.instance // Register plugin kits
-        ..register(const WidgetInfoInspector())
-        ..register(const WidgetDetailInspector())
-        ..register(const ColorSucker())
-        ..register(AlignRuler())
-        ..register(const ColorPicker()) // New feature
-        ..register(const TouchIndicator()) // New feature
-        ..register(Performance())
-        ..register(const ShowCode())
-        ..register(const MemoryInfoPage())
-        ..register(CpuInfoPage())
-        ..register(const DeviceInfoPanel())
-        ..register(Console()); // Pass in your Dio instance
-      // After flutter_ume 0.3.0
-      runApp(const UMEWidget(child: MyApp(), enable: true));
-    } else {
-      runApp(const MyApp());
-    }
+    runApp(const MyApp());
   },
       zoneSpecification: ZoneSpecification(print: (self, parent, zone, line) {
         collectLog(line);
@@ -84,6 +59,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Flutter Demo',
       onGenerateTitle: (context) => S.of(context).app_name,
@@ -215,6 +191,10 @@ class _MyHomePageState extends State<MyHomePage> with LifeStateOwnerMixin {
         RoutePageItem(
           title: "Alloo相关测试",
           builder: (context) => const AllooMainPage(),
+        ),
+        RoutePageItem(
+          title: "WebView测试",
+          builder: (context) => const CommonWebViewPage(url: url),
         ),
       ],
     );

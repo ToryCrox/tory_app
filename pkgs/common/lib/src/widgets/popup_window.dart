@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+
+import 'custom_overlay.dart';
 
 const int _windowPopupDuration = 300;
 const double _kWindowCloseIntervalEnd = 2.0 / 3.0;
@@ -17,6 +20,7 @@ class PopupWindowButton<T> extends StatefulWidget {
     this.direction,
     this.align,
     this.margin,
+    this.barrierColor,
     this.duration = 300,
     this.onWindowShow,
     this.onWindowDismiss,
@@ -30,6 +34,7 @@ class PopupWindowButton<T> extends StatefulWidget {
   final PopupDirection? direction;
   final PopupAlign? align;
   final EdgeInsetsGeometry? margin;
+  final Color? barrierColor;
 
   /// 按钮按钮后到显示window 出现的时间
   /// the transition duration before [buttonBuilder] show up
@@ -63,6 +68,7 @@ class PopupWindowButtonState<T> extends State<PopupWindowButton> {
       direction: widget.direction,
       align: widget.align,
       margin: widget.margin,
+      barrierColor: widget.barrierColor,
       duration: widget.duration,
       builder: widget.windowBuilder,
       onWindowShow: widget.onWindowShow,
@@ -88,6 +94,7 @@ class _PopupWindowRoute<T> extends PopupRoute<T> with PopupWindowRoute {
     this.direction,
     this.align,
     this.margin,
+    this.customBarrierColor,
     this.barrierLabel,
     this.semanticLabel,
     this.duration,
@@ -115,6 +122,7 @@ class _PopupWindowRoute<T> extends PopupRoute<T> with PopupWindowRoute {
   final PopupDirection? direction;
   final PopupAlign? align;
   final EdgeInsetsGeometry? margin;
+  final Color? customBarrierColor;
   final String? semanticLabel;
   @override
   final String? barrierLabel;
@@ -138,7 +146,7 @@ class _PopupWindowRoute<T> extends PopupRoute<T> with PopupWindowRoute {
   bool get barrierDismissible => dismissible;
 
   @override
-  Color? get barrierColor => Colors.transparent;
+  Color? get barrierColor => customBarrierColor;
 
   @override
   TickerFuture didPush() {
@@ -190,7 +198,7 @@ class _PopupWindowRoute<T> extends PopupRoute<T> with PopupWindowRoute {
       try {
         _autoAdjustPositionByAnchor(anchorContext);
       } catch(e) {
-        debugPrint('_autoAdjustPositionByAnchor error: $e');
+        print('_autoAdjustPositionByAnchor error: $e');
       }
     });
   }
@@ -203,7 +211,7 @@ class _PopupPageWidget extends StatefulWidget {
     required this.direction,
     required this.align,
     required this.margin,
-    required this.capturedThemes,
+    this.capturedThemes,
     required this.builder,
   }) : super(key: key);
 
@@ -211,7 +219,7 @@ class _PopupPageWidget extends StatefulWidget {
   final PopupDirection? direction;
   final PopupAlign? align;
   final EdgeInsetsGeometry? margin;
-  final CapturedThemes capturedThemes;
+  final CapturedThemes? capturedThemes;
   final WidgetBuilder builder;
 
   @override
@@ -415,12 +423,13 @@ class _PopupWindowScope extends InheritedWidget {
 
 PopupWindowRoute<T> showWindow<T>({
   required BuildContext context,
-  required RelativeRect position,
+  required RelativeRect  position,
   BuildContext? anchorContext,
   int? duration,
   PopupDirection? direction,
   PopupAlign? align,
   EdgeInsetsGeometry? margin,
+  Color? barrierColor,
   String? semanticLabel,
   required AnimatedWidgetBuilder builder,
   VoidCallback? onWindowShow,
@@ -442,6 +451,7 @@ PopupWindowRoute<T> showWindow<T>({
     direction: direction,
     align: align,
     margin: margin,
+    customBarrierColor: barrierColor,
     onWindowShow: onWindowShow,
     onWindowDismiss: onWindowDismiss,
     dismissible: dismissible,
@@ -468,6 +478,7 @@ PopupWindowRoute<T>? showPopupWindow<T>({
   PopupDirection? direction,
   PopupAlign? align,
   EdgeInsetsGeometry? margin,
+  Color? barrierColor,
   int? duration,
   VoidCallback? onWindowShow,
   VoidCallback? onWindowDismiss,
@@ -487,6 +498,7 @@ PopupWindowRoute<T>? showPopupWindow<T>({
     direction: direction,
     align: align,
     margin: margin,
+    barrierColor: barrierColor,
     onWindowShow: onWindowShow,
     dismissible: dismissible,
     barrierDuration: barrierDuration,
@@ -495,13 +507,9 @@ PopupWindowRoute<T>? showPopupWindow<T>({
   );
 }
 
-RelativeRect? findAnchorPosition(BuildContext anchorContext) {
+RelativeRect? findAnchorPosition(BuildContext anchorContext, [BuildContext? overlayContext]) {
   final RenderBox? button = anchorContext.findRenderObject() as RenderBox?;
-  final RenderBox? overlay = Navigator
-      .of(anchorContext)
-      .overlay
-      ?.context
-      .findRenderObject() as RenderBox?;
+  final RenderBox? overlay = (overlayContext ?? Navigator.of(anchorContext).overlay?.context)?.findRenderObject() as RenderBox?;
   if (button == null || overlay == null) return null;
   final RelativeRect position = RelativeRect.fromRect(
     Rect.fromPoints(
@@ -555,4 +563,117 @@ mixin PopupWindowRoute<T> on PopupRoute<T> {
       Navigator.of(context).pop();
     }
   }
+}
+
+abstract class IOverlayWrapper {
+  final Completer _completer = Completer();
+
+  Future get future => _completer.future;
+
+  Future removeDelay(Duration delay);
+
+  void remove();
+}
+
+class OverlayWrapper extends IOverlayWrapper{
+  OverlayEntry? _overlayEntry;
+
+  OverlayWrapper(BuildContext context, WidgetBuilder builder) {
+    final entry = OverlayEntry(builder: builder);
+    Overlay.of(context).insert(entry);
+    _overlayEntry = entry;
+  }
+
+  bool get isShow => _overlayEntry != null;
+
+  void _complete() {
+    if (!_completer.isCompleted) {
+      _completer.complete();
+    }
+  }
+
+  @override
+  Future removeDelay(Duration delay) async {
+    await Future.delayed(delay);
+    remove();
+  }
+
+  @override
+  void remove() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+    _complete();
+  }
+}
+
+class CustomOverlayWrapper extends IOverlayWrapper {
+  CustomOverlayEntry? _overlayEntry;
+
+  CustomOverlayWrapper(BuildContext context, WidgetBuilder builder){
+    final entry = CustomOverlayEntry(builder: builder);
+    CustomOverlay.of(context).insert(entry);
+    _overlayEntry = entry;
+  }
+
+  bool get isShow => _overlayEntry != null;
+
+  void _complete() {
+    if (!_completer.isCompleted) {
+      _completer.complete();
+    }
+  }
+
+  @override
+  Future removeDelay(Duration delay) async {
+    await Future.delayed(delay);
+    remove();
+  }
+
+  @override
+  void remove() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+    _complete();
+  }
+}
+
+IOverlayWrapper? showPopupOverlay({
+  required BuildContext context,
+  required BuildContext anchorContext,
+  required WidgetBuilder builder,
+  PopupDirection? direction,
+  PopupAlign? align,
+  EdgeInsetsGeometry? margin,
+  int? duration,
+  Duration? delayRemove,
+  bool onCustomOverlay = true,
+}) {
+  final customOverlay = onCustomOverlay ? CustomOverlay.maybeOf(context) : null;
+  if (onCustomOverlay && customOverlay == null) {
+    throw FlutterError('CustomOverlay is not found in context. Please use wrap with CustomOverlay on the top of the widget tree.');
+  }
+  final RelativeRect? position = findAnchorPosition(anchorContext, customOverlay?.context);
+  if (position == null) return null;
+  final captureTheme = InheritedTheme.capture(
+    from: context,
+    to: null,
+  );
+  childBuilder(context) => captureTheme.wrap(_PopupPageWidget(
+      position: position,
+      direction: direction,
+      align: align,
+      margin: margin,
+      builder: builder,
+    ));
+
+  IOverlayWrapper overlayWrapper;
+  if (customOverlay != null) {
+    overlayWrapper = CustomOverlayWrapper(context, childBuilder);
+  } else {
+    overlayWrapper = OverlayWrapper(context, childBuilder);
+  }
+  if (delayRemove != null) {
+    overlayWrapper.removeDelay(delayRemove);
+  }
+  return overlayWrapper;
 }

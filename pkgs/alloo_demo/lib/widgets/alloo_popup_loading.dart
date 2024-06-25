@@ -1,66 +1,24 @@
-import 'package:alloo_demo/widgets/alloo_loading.dart';
 import 'package:flutter/material.dart';
 
-OverlayEntry? _loadingEntry;
-GlobalKey<_LazyAllooLoadingState>? _loadingKey;
-
-Future showPopupAllooLoading(BuildContext context,
-    {Duration delay = const Duration(milliseconds: 300)}) async {
-  if (_loadingEntry != null) {
-    return;
-  }
-  final overlay = Overlay.of(context);
-  if (overlay == null) {
-    return;
-  }
-  print('showPopupAllooLoading');
-  final key = GlobalKey<_LazyAllooLoadingState>();
-  final entry = OverlayEntry(
-    maintainState: true,
-    builder: (context) {
-      return _LazyAllooLoading(
-        key: key,
-        delay: delay,
-        text: '',
-      );
-    },
-  );
-  _loadingKey = key;
-  _loadingEntry = entry;
-  overlay.insert(entry);
-}
-
-Future hidePopupAllooLoading(BuildContext context) async {
-  print('hidePopupAllooLoading');
-  if (_loadingKey == null || _loadingKey?.currentState == null) {
-    return;
-  }
-  await _loadingKey?.currentState?.dismiss().whenComplete(() {
-    _reset();
-  });
-}
-
-void _reset() {
-  _loadingEntry?.remove();
-  _loadingKey = null;
-  _loadingEntry = null;
-}
+import 'alloo_loading.dart';
 
 typedef _LoadingDismissCallback = void Function();
 
 _LoadingDismissCallback? _loadingDismissCallback;
 
+/// 显示loading弹框
 void showLoadingDialog(
   BuildContext context, {
   String? text,
   Duration delay = const Duration(milliseconds: 300),
-})  {
+  bool dismissible = false,
+}) {
   if (_loadingDismissCallback != null) {
     return;
   }
   showGeneralDialog(
     context: context,
-    barrierDismissible: false,
+    barrierDismissible: dismissible,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
     barrierColor: Colors.transparent,
     transitionDuration: const Duration(milliseconds: 300),
@@ -74,14 +32,18 @@ void showLoadingDialog(
           _LazyAllooLoading(
             delay: delay,
             text: text ?? '',
+            dismissible: dismissible,
           )
         ],
       );
     },
-    routeSettings: const RouteSettings(name: 'loading_dialog'),
-  );
+    routeSettings: const RouteSettings(name: '/loading_dialog'),
+  ).whenComplete(() {
+    _loadingDismissCallback = null;
+  });
 }
 
+/// 隐藏loading弹框
 void hideLoadingDialog() {
   if (_loadingDismissCallback == null) {
     return;
@@ -95,10 +57,12 @@ class _LazyAllooLoading extends StatefulWidget {
     Key? key,
     required this.delay,
     required this.text,
+    required this.dismissible,
   }) : super(key: key);
 
   final String text;
   final Duration delay;
+  final bool dismissible;
 
   @override
   State<_LazyAllooLoading> createState() => _LazyAllooLoadingState();
@@ -115,9 +79,6 @@ class _LazyAllooLoadingState extends State<_LazyAllooLoading>
   @override
   void initState() {
     super.initState();
-    _controller.addStatusListener((status) {
-      print('status: $status');
-    });
 
     Future.delayed(widget.delay, () {
       if (mounted) {
@@ -133,13 +94,6 @@ class _LazyAllooLoadingState extends State<_LazyAllooLoading>
   void dispose() {
     _controller.dispose();
     super.dispose();
-  }
-
-  Future dismiss() async {
-    if (!_isShow) {
-      return;
-    }
-    await _controller.reverse();
   }
 
   @override
@@ -176,7 +130,7 @@ class _LazyAllooLoadingState extends State<_LazyAllooLoading>
     }
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return widget.dismissible;
       },
       child: Positioned.fill(
         child: AbsorbPointer(

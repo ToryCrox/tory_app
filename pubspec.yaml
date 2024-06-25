@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -63,6 +63,7 @@ dependencies:
   logger: ^1.1.0
 
   location: ^4.2.0
+  webview_flutter: ^4.4.2
 
 dev_dependencies:
   flutter_test:
@@ -75,14 +76,6 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
   flutter_svg: ^1.1.6
-
-  flutter_ume: ^1.0.1
-  flutter_ume_kit_ui: ^1.0.0
-  flutter_ume_kit_device: ^1.0.0
-  flutter_ume_kit_perf: ^1.0.0
-  flutter_ume_kit_show_code: ^1.0.0
-  flutter_ume_kit_console: ^1.0.0
-  flutter_ume_kit_dio: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

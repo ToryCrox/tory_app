@@ -29,3 +29,4 @@ export 'src/widgets/general_gradient_button.dart';
 export 'src/widgets/count_down_widget.dart';
 export 'src/widgets/cupertino_switch_plus.dart';
 export 'src/widgets/lite_list_tile.dart';
+export 'src/widgets/custom_overlay.dart';
