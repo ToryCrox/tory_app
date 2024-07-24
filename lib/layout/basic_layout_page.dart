@@ -7,6 +7,7 @@ import 'package:tory_app/layout/tab_page.dart';
 import 'package:tory_base/tory_base.dart';
 
 import '../basic_demo/sliver/sliver_app_bar_demo_page.dart';
+import 'new_box_task_rule_page.dart';
 import 'widget/custom_spin_wheel.dart';
 
 class BasicLayoutPage extends StatefulWidget {
@@ -46,6 +47,10 @@ class _BasicLayoutPageState extends State<BasicLayoutPage> {
           RoutePageItem(
             title: 'SliverAppBar测试',
             builder: (context) => const SliverAppBarDemoPage(),
+          ),
+          RoutePageItem(
+            title: 'Table测试',
+            builder: (context) => NewBoxTaskRulePage(),
           ),
           CustomSpinWheel(
             controller: _controller,

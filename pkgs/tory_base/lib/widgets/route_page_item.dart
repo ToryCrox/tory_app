@@ -19,13 +19,11 @@ class RoutePageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LiteListTile(
+    return ListTile(
       leading: icon != null ? Icon(icon) : null,
       title: Text(title),
       subtitle: subTitle != null ? Text(subTitle!) : null,
       trailing: const Icon(Icons.navigate_next),
-      verticalTitlePadding: 2,
-      horizontalTrailGap: 0,
       onTap: () {
         if (onPress != null) {
           onPress?.call();
