@@ -12,7 +12,6 @@ import 'package:tory_app/layout/basic_layout_page.dart';
 import 'package:tory_app/basic_demo/basic_widgets_page.dart';
 import 'package:tory_app/basic_demo/image_icon_route.dart';
 import 'package:tory_app/basic_demo/new_route_demo.dart';
-import 'package:tory_app/third/common_web_view_page.dart';
 import 'package:tory_app/third/third_packege_demo.dart';
 import 'package:tory_base/tory_base.dart';
 
@@ -191,10 +190,6 @@ class _MyHomePageState extends State<MyHomePage> with LifeStateOwnerMixin {
         RoutePageItem(
           title: "Alloo相关测试",
           builder: (context) => const AllooMainPage(),
-        ),
-        RoutePageItem(
-          title: "WebView测试",
-          builder: (context) => const CommonWebViewPage(url: url),
         ),
       ],
     );
